@@ -7,11 +7,13 @@ import ReactDOM from 'react-dom';
 require('react-tap-event-plugin')();
 
 import AppHeader from './app-header';
+import AppFooter from './app-footer';
 
 const MyAwesomeReactComponent = props =>
 	<div>
 		<AppHeader />
 		<p>test p</p>
+		<AppFooter />
 	</div>;
 
 const App = props =>
