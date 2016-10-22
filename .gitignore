@@ -1,4 +1,4 @@
-# Logs
+﻿# Logs
 logs
 *.log
 npm-debug.log*
@@ -88,3 +88,4 @@ $RECYCLE.BIN/
 yarn.lock
 
 bundle*
+dist/

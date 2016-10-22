@@ -1,2 +1,4 @@
-start python -m SimpleHTTPServer 3000
-start http://localhost:3000/
+pushd dist
+start python -m SimpleHTTPServer 3001
+start http://localhost:3001/
+popd
