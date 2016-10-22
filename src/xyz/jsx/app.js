@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {render} from 'react-dom';
+import 'regenerator-runtime/runtime';
 
 // Needed for onTouchTap http://stackoverflow.com/a/34015469/988941
 //require('react-tap-event-plugin')();
