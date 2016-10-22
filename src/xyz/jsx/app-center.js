@@ -5,17 +5,18 @@ import {Button, ButtonToolbar} from 'react-bootstrap';
 import aa from 'aa';
 
 class AppCenter extends React.Component {
-	constructor(props) {
-		super(props);
+	constructor(props, ctx, upd) {
+		super(props, ctx, upd);
 		this.handleClick = this.handleClick.bind(this);
 		this.state = {n: 0};
 	}
 	handleClick() {
-		let self = this;
-		self.setState({n: self.state.n + 1});
+		let that = this;
 		aa(function *() {
-			yield cb => setTimeout(cb, 1000);
-			self.setState({n: self.state.n + 1});
+			for (let i = 0; i < 10; ++i) {
+				that.setState({n: that.state.n + 1});
+				yield aa.wait(100);
+			}
 			//alert('onClick triggered on the title component');
 		});
 	}
