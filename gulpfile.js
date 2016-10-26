@@ -19,7 +19,7 @@ gulp.task('default', ['build', 'copy-files', 'copy-min-js'],
 	cb => run('watch', 'watch-files', cb));
 
 gulp.task('build',
-	cb => run('browserify' /*, 'uglify'*/, cb));
+	cb => run('browserify', 'uglify', cb));
 
 gulp.task('watch', () =>
 	gulp.watch('src/xyz/jsx/*.js', ['build']));
@@ -47,7 +47,7 @@ gulp.task('uglify', () =>
 	gulp.src('dist/xyz/js/bundle.js')
 		.pipe(uglify())
 		.pipe(rename('bundle.min.js'))
-		.pipe(gulp.dest('dist/xyz/js/min/')));
+		.pipe(gulp.dest('dist/xyz/js/')));
 //		.pipe(uglify({preserveComments: 'license'}))
 
 gulp.task('watch-files', () =>

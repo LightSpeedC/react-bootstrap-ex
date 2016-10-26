@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {render} from 'react-dom';
 import 'regenerator-runtime/runtime';
 
 // Needed for onTouchTap http://stackoverflow.com/a/34015469/988941
@@ -22,4 +22,4 @@ const MyAwesomeReactComponent = props =>
 const App = props =>
 	<MyAwesomeReactComponent />;
 
-ReactDOM.render(<App />, document.getElementById('app'));
+render(<App />, document.getElementById('app'));
