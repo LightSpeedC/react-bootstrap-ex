@@ -14,15 +14,17 @@ const DIST = path.resolve(process.env.DIST || 'dist');
 console.log('port:', PORT, 'dist:', DIST);
 
 const HOT_RELOAD_PORT = process.env.HOT_RELOAD_PORT || 3080;
-const HOT_RELOAD_SCRIPT =
-	'<script>!function(){' +
-	'var s,T=setTimeout,t=T(x,1000),l=location;' +
-	'function x(){' +
-	's=new WebSocket("ws://localhost:' + HOT_RELOAD_PORT + '");' +
-	's.onopen=function(){t&&clearTimeout(t);t=0};' +
-	's.onclose=function(){t=T(x,10000)};' +
+const HOT_RELOAD_SCRIPT = '<div id="hotReloadDiv"><a href="/">home</a> / <a href=".">cur</a>'+
+	'<span id="hotReloadSpan"></span></div>' +
+	'<script>setTimeout(function x(){"use strict";' +
+	'var s,T=setTimeout,t,l=location,h=hotReloadDiv;' +
+	'try{s=new WebSocket("ws://localhost:' + HOT_RELOAD_PORT + '");}catch(e){}' +
+	's.onopen=function(){t&&clearTimeout(t);t=0;h.style.backgroundColor="lightgreen";hotReloadSpan.innerHTML=" " + new Date().toLocaleTimeString()};' +
+	's.onclose=function(){h.style.backgroundColor="lightgray";t=T(x,3000)};' +
 	's.onmessage=function(){l.href=l.href};' +
-	'}}();</script>';
+	'h.style.backgroundColor="lightgray";' +
+	//'hotReloadSpan.innerHTML=" " + new Date().toLocaleTimeString();' +
+	'},0);</script>';
 
 const TYPES = {
 	'.js': 'text/javascript',
@@ -77,7 +79,7 @@ http.createServer(aa.callback(function *(req, res) {
 				return resFile(file + name);
 		res.writeHead(200, {'content-type': 'text/html'});
 		res.end('Directory: ' + req.url + '<br>\n' + names.map(x =>
-			'<a href="' + x + '">' + x + '</a><br>').join('\n'));
+			'<a href="' + x + '">' + x + '</a><br>\n').join('') + HOT_RELOAD_SCRIPT);
 	}
 
 	function resRedirect(code, loc) { // リダイレクトさせる
@@ -89,15 +91,24 @@ http.createServer(aa.callback(function *(req, res) {
 		const msg = (err + '').replace(DIST, '*');
 		console.error(msg);
 		if (code instanceof Error) err = code, code = 500;
-		res.writeHead(code, {'content-type': 'text/plain'});
-		res.end(code + ' ' + http.STATUS_CODES[code] + '\n' + msg);
+		res.writeHead(code, {'content-type': 'text/html'});
+		res.end('<h2>' + code + ' ' + http.STATUS_CODES[code] + '</h2><h3>' + msg + '</h3>\n' +
+			HOT_RELOAD_SCRIPT);
 	}
 
-	// hot reload service
-	let tt, ss = [], ws = new (require('ws').Server)({port: HOT_RELOAD_PORT});
-	ws.on('connection', s =>
-		ss.push(s.on('close', () => ss = ss.filter(x => x !== s))));
-	require('gulp').watch(DIST + '/**', () => (tt && clearTimeout(tt),
-		tt = setTimeout(() => ss.forEach(s => s.send('reload')), 1000)));
+})).listen(PORT, () => {
+	process.on('uncaughtException', err =>
+		console.log(err + (err.filename ? ' file: ' + err.filename : '')));
 
-})).listen(PORT); // ポートをListenする
+	// hot reload service
+	let list = [];
+	const RELOAD = () => list.forEach(s => s.send('reload'));
+	let timer = setTimeout(RELOAD, 5000);
+	const ws = new (require('ws').Server)({port: HOT_RELOAD_PORT});
+	ws.on('connection', s =>
+		list.push(s.on('close', () => list = list.filter(x => x !== s))));
+	require('gulp').watch(DIST + '/**', () => {
+		timer && clearTimeout(timer);
+		timer = setTimeout(RELOAD, 1000);
+	});
+}); // ポートをListenする
