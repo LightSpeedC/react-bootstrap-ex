@@ -8,18 +8,7 @@ import AppHeader from './app-header';
 import AppFooter from './app-footer';
 import AppCenter from './app-center';
 
-/*
-const App = props =>
-	<div>
-		<AppHeader />
-		<AppCenter />
-		<p>test p2</p>
-		{props.children}
-		<AppFooter />
-	</div>;
-*/
-
-class MyComponent extends React.Component {
+class OurComponent extends React.Component {
 	constructor(props) {
 		super(props);
 		if (this.state === undefined) this.state = {};
@@ -32,7 +21,7 @@ class MyComponent extends React.Component {
 	}
 }
 
-class App extends MyComponent {
+class App extends OurComponent {
 	constructor(props) {
 		super(props);
 		console.log('App1:', Object.getOwnPropertyNames(this));
@@ -49,7 +38,7 @@ class App extends MyComponent {
 			<button onClick={this.onClick}>++{this.state.counter}</button>
 			<AppHeader />
 			<AppCenter />
-			<p>test p2</p>
+			<p>test p1</p>
 			{this.props.children}
 			<AppFooter />
 		</div>;
