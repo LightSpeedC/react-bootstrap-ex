@@ -14,6 +14,8 @@ const literalify = require('literalify');
 const source     = require('vinyl-source-stream');
 const notify     = require('gulp-notify');
 const notifier   = require('node-notifier');
+const run        = require('run-sequence');
+const del        = require('del');
 
 const X = ['xyz'];
 const SRC_FILES = [
@@ -26,8 +28,6 @@ const MIN_FILES = [
 		'node_modules/react-dom/dist/*.min.js*',
 		'node_modules/react-router/umd/*.min.js*',
 		'node_modules/react-bootstrap/dist/*.min.js*'];
-
-gulp.task('browserify', X.map(x => 'browserify-' + x));
 
 X.forEach(x => {
 
@@ -74,14 +74,15 @@ gulp.task('copy-min-js', () =>
 
 gulp.task('build-all', ['build-jsx', 'copy-files', 'copy-min-js']);
 
-gulp.task('watch-jsx', ['build-all'], () =>
+gulp.task('watch', () => (
 	X.forEach(x =>
-		gulp.watch('src/' + x + '/jsx/*.js', ['build-jsx-' + x])));
-
-gulp.task('watch-files', ['build-all'], () =>
+		gulp.watch('src/' + x + '/jsx/*.js', ['build-jsx-' + x])),
 	SRC_FILES.forEach(file =>
-		gulp.watch(file, ['copy-' + file])));
+		gulp.watch(file, ['copy-' + file]))
+));
 
-gulp.task('watch-start', ['watch-jsx', 'watch-files']);
+gulp.task('clean', cb =>
+	del(['dist'], cb));
 
-gulp.task('default', ['watch-start']);
+gulp.task('default', cb =>
+	run('clean', 'build-all', 'watch', cb));
