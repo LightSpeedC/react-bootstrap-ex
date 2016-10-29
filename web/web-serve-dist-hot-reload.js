@@ -92,8 +92,8 @@ http.createServer(aa.callback(function *(req, res) {
 		console.error(msg);
 		if (code instanceof Error) err = code, code = 500;
 		res.writeHead(code, {'content-type': 'text/html'});
-		res.end('<h2>' + code + ' ' + http.STATUS_CODES[code] + '</h2><h3>' + msg + '</h3>\n' +
-			HOT_RELOAD_SCRIPT);
+		res.end('<h2>' + code + ' ' + http.STATUS_CODES[code] + '</h2>\n' +
+			'<h3>' + msg + '</h3>\n' + HOT_RELOAD_SCRIPT);
 	}
 
 })).listen(PORT, () => {
