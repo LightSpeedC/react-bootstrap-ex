@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+
+<div id="app1"></div>
+<script>
+ReactDOM.render(React.DOM.h1(null, 'Hello, React! (app1)'), app1);
+</script>
+
+<div id="app2"></div>
+<script>
+ReactDOM.render(
+    React.DOM.div(null,
+        React.DOM.h1(null, 'Hello, React! (app2)'),
+        React.DOM.h2(null, 'head2'),
+        'text'),
+    app2);
+</script>
