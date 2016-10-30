@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+
+Stateless Functional Components<br>
+構文React.createElement<br>
+勉強のためのサンプルです。参考にしないでください。
+
+<div id="app1"></div>
+<script>
+function App1(props) {
+	return React.createElement('h1', null, 'Hello, ', props.name, '! (app1)');
+}
+
+//var app1 = document.getElementById('app1');
+ReactDOM.render(React.createElement(App1, {name: 'Kazuaki'}), app1);
+</script>
+<hr>
+
+<div id="app2"></div>
+<script>
+const App2 = props =>
+	React.createElement('h1', null, 'Hello, ', props.name, '! (app2)');
+
+//var app2 = document.getElementById('app2');
+ReactDOM.render(React.createElement(App2, {name: 'Kazuaki'}), app2);
+</script>

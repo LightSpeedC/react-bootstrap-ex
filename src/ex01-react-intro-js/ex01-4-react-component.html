@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+
+構文React.createClass<br>
+構文React.createElement<br>
+勉強のためのサンプルです。参考にしないでください。
+
+<div id="app1"></div>
+<script>
+var App = React.createClass({
+	render: function () {
+		return React.createElement('h1', null, 'Hello, ', this.props.name, '! (app1)');
+	}
+});
+
+//var app1 = document.getElementById('app1');
+ReactDOM.render(React.createElement(App, {name: 'Kazuaki'}), app1);
+</script>
