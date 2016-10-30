@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+
+ES6 class extends React.Component & JSX
+
+<div id="app1"></div>
+<script type="text/babel">
+class App1 extends React.Component {
+	render() {
+		return <h1>Hello, {this.props.name}! (app1)</h1>;
+	}
+}
+
+//var app1 = document.getElementById('app1');
+ReactDOM.render(<App1 name="Kazuaki"/>, app1);
+</script>

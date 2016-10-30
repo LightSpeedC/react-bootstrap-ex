@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+
+Stateless Functional Components & JSX
+
+<div id="app1"></div>
+<script type="text/babel">
+const App1 = props =>
+	<h1>Hello, {props.name}! (app1)</h1>;
+
+//var app1 = document.getElementById('app1');
+ReactDOM.render(<App1 name="Kazuaki"/>, app1);
+</script>
+<hr>
+
+<div id="app2"></div>
+<script type="text/babel">
+const App2 = ({name}) =>
+	<h1>Hello, {name}! (app2)</h1>;
+
+//var app2 = document.getElementById('app2');
+ReactDOM.render(<App2 name="Kazuaki"/>, app2);
+</script>
+<hr>
+
+<div id="app3"></div>
+<script type="text/babel">
+const App3 = props =>
+	<div>
+		<h1>Hello, {props.name}! (app3)</h1>
+		<h2>head2</h2>
+		text
+		<span style={{color: 'red'}}> style color red</span>
+	</div>;
+
+//var app3 = document.getElementById('app3');
+ReactDOM.render(<App3 name="Kazuaki"/>, app3);
+</script>

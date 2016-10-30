@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<!--<script src="https://unpkg.com/react-router@4.0.0-2/umd/react-router.min.js"></script>-->
+<script src="/js/ReactRouter.min.js"></script>
+<script src="/js/react-bootstrap.min.js"></script>
+<script src="/js/browser.min.js"></script>
+
+<title>ex01</title>
+</head>
+<body>
+
+<div id="app"></div>
+<script type="text/babel">
+const Router, {Route, NotFoundRoute, DefaultRoute, Link, RouteHandler} = ReactRouter;
+//const {Router, BrowserRouter, Link, Match} = ReactRouter;
+//const Router = BrowserRouter;
+
+const BasicExample = () => (
+	<Router>
+		<div>
+			<ul>
+				<li><Link to="/">Home</Link></li>
+				<li><Link to="/about">About</Link></li>
+				<li><Link to="/topics">Topics</Link></li>
+			</ul>
+
+			<hr/>
+
+			<Match exactly pattern="/" component={Home} />
+			<Match pattern="/about" component={About} />
+			<Match pattern="/topics" component={Topics} />
+		</div>
+	</Router>
+)
+
+const Home = () => (
+	<div>
+		<h2>Home</h2>
+	</div>
+)
+
+const About = () => (
+	<div>
+		<h2>About</h2>
+	</div>
+)
+
+const Topics = ({ pathname }) => (
+	<div>
+		<h2>Topics</h2>
+		<ul>
+			<li><Link to={`${pathname}/rendering`}>Rendering with React</Link></li>
+			<li><Link to={`${pathname}/components`}>Components</Link></li>
+			<li><Link to={`${pathname}/props-v-state`}>Props v. State</Link></li>
+		</ul>
+
+		<Match pattern={`${pathname}/:topicId`} component={Topic}/>
+		<Match pattern={pathname} exactly render={() => (
+			<h3>Please select a topic</h3>
+		)}/>
+	</div>
+)
+
+const Topic = ({ params }) => (
+	<div>
+		<h3>{params.topicId}</h3>
+	</div>
+)
+
+
+//var app = document.getElementById('app');
+ReactDOM.render(<BasicExample/>, app);
+</script>
+
+</body>
+</html>
