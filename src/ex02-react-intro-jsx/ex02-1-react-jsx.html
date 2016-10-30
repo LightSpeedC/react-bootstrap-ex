@@ -3,18 +3,24 @@
 <script src="/js/react-dom.min.js"></script>
 <script src="/js/browser.min.js"></script>
 
-<div id="app01"></div>
-<script type="text/babel">
-ReactDOM.render(<h1>Hello, world! (app01)</h1>, app01);
-</script>
+JSX
 
-<div id="app02"></div>
+<div id="app1"></div>
 <script type="text/babel">
+//var app1 = document.getElementById('app1');
+ReactDOM.render(<h1>Hello, world! (app1)</h1>, app1);
+</script>
+<hr>
+
+<div id="app2"></div>
+<script type="text/babel">
+//var app2 = document.getElementById('app2');
 ReactDOM.render(
-    <div>
-        <h1>Hello, world! (app02)</h1>
-        <h2>head2</h2>
-        text
-    </div>,
-    app02);
+	<div>
+		<h1>Hello, world! (app2)</h1>
+		<h2>head2</h2>
+		text
+		<span style={{color: 'red'}}> style color red</span>
+	</div>,
+	app2);
 </script>
