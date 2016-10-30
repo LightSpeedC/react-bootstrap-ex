@@ -2,17 +2,24 @@
 <script src="/js/react.min.js"></script>
 <script src="/js/react-dom.min.js"></script>
 
+構文React.DOM.xxx<br>
+勉強のためのサンプルです。参考にしないでください。
+
 <div id="app1"></div>
 <script>
+//var app1 = document.getElementById('app1');
 ReactDOM.render(React.DOM.h1(null, 'Hello, React! (app1)'), app1);
 </script>
+<hr>
 
 <div id="app2"></div>
 <script>
+//var app2 = document.getElementById('app2');
 ReactDOM.render(
-    React.DOM.div(null,
-        React.DOM.h1(null, 'Hello, React! (app2)'),
-        React.DOM.h2(null, 'head2'),
-        'text'),
-    app2);
+	React.DOM.div(null,
+		React.DOM.h1(null, 'Hello, React! (app2)'),
+		React.DOM.h2(null, 'head2'),
+		'text ',
+		React.DOM.span({style: {color: 'red'}}, 'style color red')),
+	app2);
 </script>
