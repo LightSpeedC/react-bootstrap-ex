@@ -14,16 +14,14 @@ const DIST = path.resolve(process.env.DIST || 'dist');
 console.log('port:', PORT, 'dist:', DIST);
 
 const HOT_RELOAD_PORT = process.env.HOT_RELOAD_PORT || 3080;
-const HOT_RELOAD_SCRIPT = '<div id="hotReloadDiv"><a href="/">home</a> / <a href=".">cur</a>'+
-	'<span id="hotReloadSpan"></span></div>' +
+const HOT_RELOAD_SCRIPT = '<hr id="hotReloadId" style="height: 1px; border: none;"/>'+
+	'<a href="/">home</a> / <a href=".">cur</a>' +
 	'<script>setTimeout(function x(){"use strict";' +
-	'var s,T=setTimeout,t,l=location,h=hotReloadDiv;' +
-	'try{s=new WebSocket("ws://localhost:' + HOT_RELOAD_PORT + '");}catch(e){}' +
-	's.onopen=function(){t&&clearTimeout(t);t=0;h.style.backgroundColor="lightgreen";hotReloadSpan.innerHTML=" " + new Date().toLocaleTimeString()};' +
-	's.onclose=function(){h.style.backgroundColor="lightgray";t=T(x,3000)};' +
+	'var s,T=setTimeout,t,l=location,h=hotReloadId.style;' +
+	'try{s=new WebSocket("ws://localhost:' + HOT_RELOAD_PORT + '");}catch(e){return t=T(x,3000)}' +
+	's.onopen=function(){t&&clearTimeout(t);t=0;h.backgroundColor="lightgreen"};' +
+	's.onclose=function(){h.backgroundColor="lightgray";t=T(x,3000)};' +
 	's.onmessage=function(){l.href=l.href};' +
-	'h.style.backgroundColor="lightgray";' +
-	//'hotReloadSpan.innerHTML=" " + new Date().toLocaleTimeString();' +
 	'},0);</script>';
 
 const TYPES = {
