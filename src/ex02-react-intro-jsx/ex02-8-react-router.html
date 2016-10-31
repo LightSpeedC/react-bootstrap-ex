@@ -11,8 +11,8 @@
 
 <script src="/js/react.min.js"></script>
 <script src="/js/react-dom.min.js"></script>
-<!--<script src="https://unpkg.com/react-router@4.0.0-2/umd/react-router.min.js"></script>-->
-<script src="/js/ReactRouter.min.js"></script>
+<script src="https://unpkg.com/react-router@4.0.0-2/umd/react-router.min.js"></script>
+<!--<script src="/js/ReactRouter.min.js"></script>-->
 <script src="/js/react-bootstrap.min.js"></script>
 <script src="/js/browser.min.js"></script>
 
@@ -22,9 +22,9 @@
 
 <div id="app"></div>
 <script type="text/babel">
-const Router, {Route, NotFoundRoute, DefaultRoute, Link, RouteHandler} = ReactRouter;
-//const {Router, BrowserRouter, Link, Match} = ReactRouter;
-//const Router = BrowserRouter;
+//const Router = ReactRouter, {Route, NotFoundRoute, DefaultRoute, Link, RouteHandler, Match} = ReactRouter;
+const {BrowserRouter, Link, Match} = ReactRouter;
+const Router = BrowserRouter;
 
 const BasicExample = () => (
 	<Router>
