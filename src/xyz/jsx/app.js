@@ -1,12 +1,15 @@
 'use strict';
 
 import React from 'react';
+//const React = require('react');
 import {render} from 'react-dom';
 import 'regenerator-runtime/runtime';
 
 import AppHeader from './app-header';
 import AppFooter from './app-footer';
 import AppCenter from './app-center';
+
+import {Button} from 'react-bootstrap';
 
 class OurComponent extends React.Component {
 	constructor(props) {
@@ -26,16 +29,26 @@ class App extends OurComponent {
 		super(props);
 		console.log('App1:', Object.getOwnPropertyNames(this));
 		console.log('App2:', Object.getOwnPropertyNames(this.constructor.prototype));
-		//this.state = {counter: 0};
+		this.state = {counter: 0};
 		//this.onClick = this.onClick.bind(this);
 	}
-	onClick() {
-		//this.setState({counter: this.state.counter + 1 || 1});
-		this.setState(state => ({counter: state.counter + 1 || 1}));
+	onPlus() {
+		//this.setState({counter: this.state.counter + 1});
+		this.setState(state => ({counter: state.counter + 1}));
+	}
+	onMinus() {
+		this.setState(state => ({counter: state.counter - 1}));
+	}
+	onReset() {
+		this.setState(state => ({counter: 0}));
 	}
 	render() {
 		return <div>
-			<button onClick={this.onClick}>++{this.state.counter}</button>
+			counter: {this.state.counter}
+			<br/>
+			<Button bsStyle="primary" onClick={this.onPlus}>plus ++</Button>
+			<Button bsStyle="warning" onClick={this.onMinus}>minus --</Button>
+			<Button bsStyle="info" onClick={this.onReset}>reset</Button>
 			<AppHeader />
 			<AppCenter />
 			<p>test p1</p>

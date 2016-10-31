@@ -22,12 +22,14 @@ const SRC_FILES = [
 		'src/**/*.html',
 		'src/**/*.css',
 		'src/**/*.ico',
+		'src/**/*.json',
 		'src/**/*.js'];
 const MIN_FILES = [
 		'node_modules/react/dist/*.min.js*',
 		'node_modules/react-dom/dist/*.min.js*',
 		'node_modules/react-router/umd/*.min.js*',
-		'node_modules/react-bootstrap/dist/*.min.js*'];
+		'node_modules/react-bootstrap/dist/*.min.js*',
+		'node_modules/light-request/light-request.js'];
 
 X.forEach(x => {
 
