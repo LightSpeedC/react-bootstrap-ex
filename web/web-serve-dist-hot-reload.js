@@ -15,7 +15,7 @@ console.log('port:', PORT, 'dist:', DIST);
 
 const HOT_RELOAD_PORT = process.env.HOT_RELOAD_PORT || 3080;
 const HOT_RELOAD_SCRIPT = '<hr id="hotReloadId" style="height: 1px; border: none;"/>'+
-	'<a href="/">home</a> / <a href=".">cur</a>' +
+	'<a href="/">home</a> / <a href="..">prev</a> / <a href=".">cur</a>' +
 	'<script>setTimeout(function x(){"use strict";' +
 	'var s,T=setTimeout,t,l=location,h=hotReloadId.style;' +
 	'try{s=new WebSocket("ws://localhost:' + HOT_RELOAD_PORT + '");}catch(e){return t=T(x,3000)}' +
