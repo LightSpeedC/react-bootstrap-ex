@@ -43,18 +43,18 @@ X.forEach(x => {
 				'react-router': 'window.ReactRouter',
 				'react-bootstrap': 'window.ReactBootstrap'
 			})
-			.require('src/' + x + '/jsx/app.js', {entry: true})
+			.require('src/' + x + '/pub/jsx/app.js', {entry: true})
 			.bundle()
 			.on('error', err => console.log('eh!?', err))
 			.pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
 			.pipe(source('bundle.js'))
-			.pipe(gulp.dest('dist/' + x + '/js/')));
+			.pipe(gulp.dest('dist/' + x + '/pub/js/')));
 
 	gulp.task('uglify-' + x, ['browserify-' + x], () =>
-		gulp.src('dist/' + x + '/js/bundle.js')
+		gulp.src('dist/' + x + '/pub/js/bundle.js')
 			.pipe(uglify({preserveComments: 'license'}))
 			.pipe(rename('bundle.min.js'))
-			.pipe(gulp.dest('dist/' + x + '/js/')));
+			.pipe(gulp.dest('dist/' + x + '/pub/js/')));
 
 	gulp.task('build-jsx-' + x, ['uglify-' + x], () =>
 		notifier.notify({message:'Build-' + x + '終了', title:'Gulp'}));
