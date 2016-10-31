@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+<script src="/js/light-request.js"></script>
+
+ES6 class extends React.Component, state & JSX
+
+<div id="app1"></div>
+<script type="text/babel">
+class App1 extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {users: [{id:0, name:"press get users button"}]};
+		this.onGetUsers = this.onGetUsers.bind(this);
+	}
+	componentWillMount() {
+		//this.onGetUsers();
+	}
+	onGetUsers() {
+		request.get({}, 'users.json')
+		.then(res => this.setState({users: res.body}));
+	}
+	render() {
+		return <div>
+			<h1>Hello, {this.props.name}! (app1)</h1>
+			<button onClick={this.onGetUsers}>get users</button>
+			{this.state.users.map(u =>
+				<div>
+					{u.id}: <b>{u.name}</b>
+				</div>)}
+		</div>;
+	}
+}
+
+//var app1 = document.getElementById('app1');
+ReactDOM.render(<App1 name="Kazuaki"/>, app1);
+</script>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+
+ES6 class extends React.Component, state & JSX
+
+<div id="app1"></div>
+<script type="text/babel">
+class App1 extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {counter: 0};
+		this.onPlus = this.onPlus.bind(this);
+		this.onMinus = this.onMinus.bind(this);
+		this.onReset = this.onReset.bind(this);
+	}
+	onPlus() {
+		this.setState(state => ({counter: state.counter + 1}));
+		//this.setState({counter: this.state.counter + 1});
+	}
+	onMinus() {
+		this.setState(state => ({counter: state.counter - 1}));
+	}
+	onReset() {
+		this.setState({counter: 0});
+	}
+	render() {
+		return <div>
+			<h1>Hello, {this.props.name}! (app1)</h1>
+			<button onClick={this.onPlus}>plus ++</button>
+			<button onClick={this.onMinus}>minus --</button>
+			<br/>
+			{this.state.counter}
+			<br/>
+			<button onClick={this.onReset}>Reset</button>
+		</div>;
+	}
+}
+
+//var app1 = document.getElementById('app1');
+ReactDOM.render(<App1 name="Kazuaki"/>, app1);
+</script>
