@@ -13,34 +13,14 @@ import {FormGroup, FormControl, ControlLabel, HelpBlock} from 'react-bootstrap';
 //import request from 'light-request';
 //import aa from 'aa';
 
-class MyComponent extends React.Component {
+import {MyComponent, TextControl,
+	PrimaryButton, SuccessButton, WarningButton, InfoButton, DangerButton
+} from '../../../lib';
+
+class MyCounter extends MyComponent {
 	constructor(props) {
 		super(props);
-		Object.getOwnPropertyNames(this.constructor.prototype)
-			.filter(p => (p.startsWith('on') || p.startsWith('handle')) &&
-				typeof this[p] === 'function')
-			.forEach(p => Object.defineProperty(this, p,
-				{configurable: true, value: this[p].bind(this)}));
-	}
-}
-
-const PrimaryButton = props =>
-	<Button bsStyle="primary" {...props}/>;
-const SuccessButton = props =>
-	<Button bsStyle="success" {...props}/>;
-const WarningButton = props =>
-	<Button bsStyle="warning" {...props}/>;
-const InfoButton = props =>
-	<Button bsStyle="info" {...props}/>;
-const DangerButton = props =>
-	<Button bsStyle="danger" {...props}/>;
-const TextControl = props =>
-	<FormControl type="text" {...props}/>;
-
-class App extends MyComponent {
-	constructor(props) {
-		super(props);
-		this.state = {counter: 0, books: [], value: '', bookName: ''};
+		this.state = {counter: 0};
 	}
 	onPlus() {
 		this.setState(state => ({counter: state.counter + 1}));
@@ -50,6 +30,22 @@ class App extends MyComponent {
 	}
 	onReset() {
 		this.setState({counter: 0});
+	}
+	render() {
+		return <div>
+			counter: {this.state.counter}
+			<br/>
+			<PrimaryButton onClick={this.onPlus} children="plus ++"/>
+			<WarningButton onClick={this.onMinus} children="minus --"/>
+			<InfoButton onClick={this.onReset} children="reset"/>
+		</div>;
+	}
+}
+
+class App extends MyComponent {
+	constructor(props) {
+		super(props);
+		this.state = {books: [], value: '', bookName: ''};
 	}
 	componentWillMount() {
 		aa(this.getBooks())
@@ -68,24 +64,14 @@ class App extends MyComponent {
 		yield *this.getBooks();
 		this.setState({bookName: ''});
 	}
-  	getValidationState() {
-		const length = this.state.value.length;
-		return length > 10 ? 'success':
-			length > 5 ? 'warning':
-			length > 0 ? 'error' : undefined;
-	}
 	onChangeBookName(e) {
 		this.setState({bookName: e.target.value});
 	}
 	render() {
 		return <div>
-			<AppHeader />
-			counter: {this.state.counter}
-			<br/>
-			<PrimaryButton onClick={this.onPlus} children="plus ++"/>
-			<WarningButton onClick={this.onMinus} children="minus --"/>
-			<InfoButton onClick={this.onReset} children="reset"/>
-			<AppCenter />
+			<AppHeader/>
+			<MyCounter/>
+			<AppCenter/>
 
 			{this.state.books.map(b => <div>{b.id}: <b>{b.name}</b></div>)}
 			<div>
