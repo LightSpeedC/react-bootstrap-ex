@@ -17,7 +17,7 @@ const notifier   = require('node-notifier');
 const run        = require('run-sequence');
 const del        = require('del');
 
-const X = ['xyz'];
+const X = ['xyz', 'ex03-react-gulp'];
 const SRC_FILES = [
 		'src/**/*.html',
 		'src/**/*.css',

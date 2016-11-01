@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+<script src="/js/light-request.js"></script>
+
+ES6 class extends React.Component, state & JSX
+
+<div id="app1"></div>
+<script type="text/babel">
+class App1 extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {firstname: props.firstname, lastname: props.lastname};
+		this.handleChange = this.handleChange.bind(this);
+	}
+	handleChange() {
+        const firstname = this.firstname.value;
+        const lastname = this.lastname.value;
+        this.setState({firstname, lastname});
+	}
+	render() {
+		return <div>
+            First name: <input ref={elem => this.firstname = elem} onChange={this.handleChange} value={this.state.firstname}/><br/>
+            Last name: <input ref={elem => this.lastname = elem} onChange={this.handleChange} value={this.state.lastname}/><br/>
+            Full name: {this.state.firstname} {this.state.lastname}
+		</div>;
+	}
+}
+
+//var app1 = document.getElementById('app1');
+ReactDOM.render(<App1 firstname="Taro" lastname="Yamada"/>, app1);
+</script>
