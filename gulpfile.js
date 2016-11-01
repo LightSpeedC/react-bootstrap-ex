@@ -78,7 +78,7 @@ gulp.task('build-all', ['build-jsx', 'copy-files', 'copy-min-js']);
 
 gulp.task('watch', () => (
 	X.forEach(x =>
-		gulp.watch('src/' + x + '/jsx/*.js', ['build-jsx-' + x])),
+		gulp.watch('src/' + x + '/pub/jsx/*.js', ['build-jsx-' + x])),
 	SRC_FILES.forEach(file =>
 		gulp.watch(file, ['copy-' + file]))
 ));
