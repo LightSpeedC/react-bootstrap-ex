@@ -84,17 +84,17 @@ class App extends MyComponent {
 			<InfoButton onClick={this.onReset} children="reset"/>
 			<AppCenter />
 
-			{this.state.books.map(b => <div>{b.id}: {b.name}</div>)}
-			<form onSubmit={this.onBookAdd}>
+			{this.state.books.map(b => <div>{b.id}: <b>{b.name}</b></div>)}
+			<div>
 				<TextControl placeholder="本の名前"
 					onChange={this.onChangeBookName}
 					value={this.state.bookName}
 				/>
-				<PrimaryButton onClick={this.onBookAdd} children="book add"/>
-			</form>
+				<PrimaryButton onClick={this.onBookAdd}>book add</PrimaryButton>
+			</div>
 			<AppFooter />
 		</div>;
 	}
 }
 
-render(<App>hello world</App>, document.getElementById('app'));
+render(<App/>, document.getElementById('app'));
