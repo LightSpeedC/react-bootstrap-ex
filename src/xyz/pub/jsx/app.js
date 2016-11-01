@@ -1,9 +1,7 @@
 'use strict';
 
 import React from 'react';
-//const React = require('react');
 import {render} from 'react-dom';
-import 'regenerator-runtime/runtime';
 
 import AppHeader from './app-header';
 import AppFooter from './app-footer';
@@ -11,8 +9,9 @@ import AppCenter from './app-center';
 
 import {Button} from 'react-bootstrap';
 import {FormGroup, FormControl, ControlLabel, HelpBlock} from 'react-bootstrap';
-import request from 'light-request';
-import aa from 'aa';
+//import 'regenerator-runtime/runtime';
+//import request from 'light-request';
+//import aa from 'aa';
 
 class MyComponent extends React.Component {
 	constructor(props) {
@@ -27,10 +26,14 @@ class MyComponent extends React.Component {
 
 const PrimaryButton = props =>
 	<Button bsStyle="primary" {...props}/>;
+const SuccessButton = props =>
+	<Button bsStyle="success" {...props}/>;
 const WarningButton = props =>
 	<Button bsStyle="warning" {...props}/>;
 const InfoButton = props =>
 	<Button bsStyle="info" {...props}/>;
+const DangerButton = props =>
+	<Button bsStyle="danger" {...props}/>;
 const TextControl = props =>
 	<FormControl type="text" {...props}/>;
 

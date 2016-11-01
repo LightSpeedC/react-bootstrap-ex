@@ -29,7 +29,10 @@ const MIN_FILES = [
 		'node_modules/react-dom/dist/*.min.js*',
 		'node_modules/react-router/umd/*.min.js*',
 		'node_modules/react-bootstrap/dist/*.min.js*',
-		'node_modules/light-request/light-request.js'];
+		'node_modules/regenerator-runtime/runtime.js',
+		'node_modules/light-request/light-request.js',
+		'node_modules/promise-thunk/promise-thunk.js',
+		'node_modules/aa/aa.js'];
 
 X.forEach(x => {
 
@@ -41,7 +44,10 @@ X.forEach(x => {
 				'react': 'window.React',
 				'react-dom': 'window.ReactDOM',
 				'react-router': 'window.ReactRouter',
-				'react-bootstrap': 'window.ReactBootstrap'
+				'react-bootstrap': 'window.ReactBootstrap',
+				'request': 'light-request',
+				'PromiseThunk': 'promise-thunk',
+				'aa': 'aa'
 			})
 			.require('src/' + x + '/pub/jsx/app.js', {entry: true})
 			.bundle()
