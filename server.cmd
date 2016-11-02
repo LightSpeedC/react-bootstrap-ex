@@ -7,7 +7,7 @@ node server/server
 @if "%paused%" == "" pause & set paused=paused
 @goto end
 @:set_port
-@node web/random-port > x.bat
+@node server/random-port > x.bat
 @call x.bat
 @del x.bat
 @:end
