@@ -1,6 +1,7 @@
-module.exports = function (context) {
+module.exports = function (dir, context) {
 	'use strict';
 
+	const http = require('http');
 	const path = require('path');
 	const fs = require('fs');
 
@@ -10,8 +11,7 @@ module.exports = function (context) {
 		obj.done || obj.value(cb); } ();
 	aa.callback = gfn => (req, res, next) => aa(gfn(req, res, next));
 
-	const DIST = context.dist;
-	const PORT = context.port;
+	const DIST = path.resolve(dir);
 	const HOT_RELOAD_PORT = context.hot_reload_port;
 
 	const HOT_RELOAD_SCRIPT =

@@ -4,9 +4,9 @@ void function () {
 	const express = require('express'), app = express();
 	const bodyParser = require('body-parser');
 
+	const dir = process.env.DIST || 'dist';
 	const context = {port: process.env.PORT || 3000,
-		hot_reload_port: process.env.HOT_RELOAD_PORT || 3080,
-		dist: require('path').resolve(process.env.DIST || 'dist')};
+		hot_reload_port: process.env.HOT_RELOAD_PORT || 3080};
 	console.log(context);
 
 	// ボディーパーサー
@@ -17,7 +17,7 @@ void function () {
 	app.use('/xyz/api', require('./xyz-api')(context));
 
 	// 静的ファイルとディレクトリ一覧
-	const onRequest = require('./serve-hot-reload')(context);
+	const onRequest = require('./serve-hot-reload')(dir, context);
 	app.use(onRequest);
 	// Hot Reload Service
 	onRequest.hotReloadService(context);
