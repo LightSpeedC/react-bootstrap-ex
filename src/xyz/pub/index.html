@@ -11,8 +11,27 @@
 <!--<script src="/js/ReactRouter.min.js"></script>-->
 <script src="/js/react-bootstrap.min.js"></script>
 <script src="/js/light-request.js"></script>
+<!--
 <script src="/js/promise-thunk.js"></script>
 <script src="/js/aa.js"></script>
+-->
+<script>
+function aa(gen) {
+	return new Promise(function (res, rej) {
+		void function cb(err, val) {
+			try {
+				var obj = err ? gen.throw(err) : gen.next(val);
+				obj.done ? res(obj.value) : (obj.value)(cb);
+			} catch (e) { rej(e); }
+		} ();
+	});
+}
+aa.callback = function (gfn) {
+	return function () {
+		return aa(gfn.apply(this, arguments));
+	};
+};
+</script>
 <script src="/js/runtime.js"></script>
 
 <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">-->

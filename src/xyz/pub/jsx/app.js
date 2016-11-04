@@ -42,10 +42,19 @@ class MyCounter extends MyComponent {
 	}
 }
 
+const Books = props =>
+	<div>
+		{props.list.map(b =>
+			<div>
+				{b.id}: <b>{b.name}</b>
+			</div>
+		)}
+	</div>;
+
 class App extends MyComponent {
 	constructor(props) {
 		super(props);
-		this.state = {books: [], value: '', bookName: ''};
+		this.state = {books: [], bookName: ''};
 	}
 	componentWillMount() {
 		aa(this.getBooks())
@@ -54,6 +63,9 @@ class App extends MyComponent {
 	onBookAdd() {
 		aa(this.postBook())
 		.catch(err => console.error('postBook:', err));
+	}
+	onChangeBookName(e) {
+		this.setState({bookName: e.target.value});
 	}
 	*getBooks() {
 		const res = yield request.get('/xyz/api/books');
@@ -64,16 +76,13 @@ class App extends MyComponent {
 		yield *this.getBooks();
 		this.setState({bookName: ''});
 	}
-	onChangeBookName(e) {
-		this.setState({bookName: e.target.value});
-	}
 	render() {
 		return <div>
 			<AppHeader/>
 			<MyCounter/>
 			<AppCenter/>
 
-			{this.state.books.map(b => <div>{b.id}: <b>{b.name}</b></div>)}
+			<Books list={this.state.books}/>
 			<div>
 				<TextControl placeholder="本の名前"
 					onChange={this.onChangeBookName}

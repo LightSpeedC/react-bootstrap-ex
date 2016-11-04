@@ -110,11 +110,16 @@ module.exports = function (dir, context) {
 		const RELOAD = () => list.forEach(s => s.send('reload'));
 		let timer = setTimeout(RELOAD, 5000);
 		const ws = new (require('ws').Server)({port: HOT_RELOAD_PORT});
-		ws.on('connection', s =>
-			list.push(s.on('close', () => list = list.filter(x => x !== s))));
+		ws.on('connection', s => {
+			list.push(s.on('close', () => {
+				list = list.filter(x => x !== s);
+				console.log('ws:', list.length, 'connection' + (list.length !== 1 ? 's' : ''));
+			})); 
+			console.log('ws:', list.length, 'connection' + (list.length !== 1 ? 's' : ''));
+		});
 		require('gulp').watch(DIST + '/**', () => {
 			timer && clearTimeout(timer);
-			timer = setTimeout(RELOAD, 1000);
+			timer = setTimeout(RELOAD, 5000);
 		});
 
 	};

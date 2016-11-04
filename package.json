@@ -18,7 +18,7 @@
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^2.0.0",
-    "light-request": "^0.0.0",
+    "light-request": "0.0.2",
     "literalify": "^0.4.0",
     "minimatch": "3",
     "node-notifier": "^4.6.1",
