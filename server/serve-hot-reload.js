@@ -11,6 +11,25 @@ module.exports = function (dir, context) {
 		obj.done || obj.value(cb); } ();
 	aa.callback = gfn => (req, res, next) => aa(gfn(req, res, next));
 
+	// color
+	const csi = '\x1b['; // control sequence introducer
+	const colors = {
+		black: csi + '30m', red: csi + '31m', green: csi + '32m',
+		yellow: csi + '33m', blue: csi + '34m', magenta: csi + '35m',
+		cyan: csi + '36m', white: csi + '37m'}
+	const bgColors = {
+		bgBlack: csi + '40m', bgRed: csi + '41m', bgGreen: csi + '42m',
+		bgYellow: csi + '43m', bgBlue: csi + '44m', bgMagenta: csi + '45m',
+		bgCyan: csi + '46m', bgWhite: csi + '47m'};
+	function defineColor(colors, reset) {
+		Object.keys(colors).forEach(c => Object.defineProperty(
+			String.prototype, c, {configurable: true, get:
+				function () { return colors[c] + this + reset; }})); }
+	defineColor(colors, csi + '39m');
+	defineColor(bgColors, csi + '49m');
+	defineColor({bold: csi + '1m'}, csi + '21m');
+	defineColor({bgLight: csi + '5m'}, csi + '25m');
+
 	const DIST = path.resolve(dir);
 	const HOT_RELOAD_PORT = context.hot_reload_port;
 
@@ -44,9 +63,17 @@ module.exports = function (dir, context) {
 		const start = process.hrtime(); // 開始時刻
 		res.end = (end => function () { // 終了時にログ出力
 			const delta = process.hrtime(start); // 時刻の差
-			console.log('%d', res.statusCode,
-				(delta[0] * 1e3 + delta[1] / 1e6).toFixed(3), 'msec',
-				req.method, req.url);
+			let msg = res.statusCode + ' ' +
+				(delta[0] * 1e3 + delta[1] / 1e6).toFixed(3) + ' msec ' +
+				req.method + ' ' + req.url + ' ' +
+				http.STATUS_CODES[res.statusCode];
+			if (res.statusCode < 300) msg = msg.green;
+			else if (res.statusCode < 400) msg = msg.cyan;
+			else msg = msg.red;
+			console.log(msg);
+			//console.log('%d', res.statusCode,
+			//	(delta[0] * 1e3 + delta[1] / 1e6).toFixed(3), 'msec',
+			//	req.method, req.url);
 			end.apply(this, arguments);
 		}) (res.end);
 
@@ -93,7 +120,7 @@ module.exports = function (dir, context) {
 
 		function resError(code, err) { // エラー応答
 			const msg = (err + '').replace(DIST, '*');
-			console.error(msg);
+			console.error(msg.bgRed.bgLight);
 			if (code instanceof Error) err = code, code = 500;
 			res.writeHead(code, {'content-type': 'text/html'});
 			res.end('<h2>' + code + ' ' + http.STATUS_CODES[code] + '</h2>\n' +
@@ -102,12 +129,12 @@ module.exports = function (dir, context) {
 
 	}); // onRequest
 
-	onRequest.hotReloadService = function hotReloadService(context) {
-
+	onRequest.hotReloadService = function hotReloadService(dir, context) {
+		const DIST = path.resolve(dir);
 		const HOT_RELOAD_PORT = context.hot_reload_port;
 
 		process.on('uncaughtException', err =>
-			console.log(err + (err.filename ? ' file: ' + err.filename : '')));
+			console.error((err.stack + (err.filename ? '\nfile: ' + err.filename : '')).bgRed.bgLight));
 
 		// hot reload service
 		let list = [], last;
@@ -115,16 +142,15 @@ module.exports = function (dir, context) {
 		const COUNT = () => last !== list.length &&
 			(list.forEach(s => s.send('c'+list.length)), last = list.length);
 		let timer = setTimeout(RELOAD, 3000);
-		const ws = new (require('ws').Server)({port: HOT_RELOAD_PORT});
-		ws.on('connection', s => {
+		const ws = require('ws').createServer({port: HOT_RELOAD_PORT}, s => {
 			list.push(s.on('close', () => {
 				list = list.filter(x => x !== s);
 				COUNT();
-				console.log('ws:', list.length, 'connection' + (list.length !== 1 ? 's' : ''));
+				console.log('ws-'.magenta, list.length, 'connection' + (list.length !== 1 ? 's' : ''));
 			}));
 			s.send('c'+list.length);
 			COUNT();
-			console.log('ws:', list.length, 'connection' + (list.length !== 1 ? 's' : ''));
+			console.log('ws+'.cyan, list.length, 'connection' + (list.length !== 1 ? 's' : ''));
 		});
 		require('gulp').watch(DIST + '/**', () => {
 			timer && clearTimeout(timer);

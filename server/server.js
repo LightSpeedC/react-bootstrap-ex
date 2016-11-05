@@ -20,7 +20,7 @@ void function () {
 	const onRequest = require('./serve-hot-reload')(dir, context);
 	app.use(onRequest);
 	// Hot Reload Service
-	onRequest.hotReloadService(context);
+	onRequest.hotReloadService(dir, context);
 
 	// ポートでサービス開始
 	const server = app.listen(context.port, function () {
