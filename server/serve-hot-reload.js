@@ -16,14 +16,18 @@ module.exports = function (dir, context) {
 
 	const HOT_RELOAD_SCRIPT =
 		'<hr id="hotReloadId" style="height: 1px; border: none;"/>'+
-		'<a href="/">home</a> / <a href="..">prev</a> / <a href=".">cur</a>' +
+		'<div id="hotReloadDiv">(<span id="hotReloadSpan"></span>) <a href="/">home</a> / ' +
+		'<a href="..">prev</a> / <a href=".">cur</a></div>' +
 		'<script>setTimeout(function x(){"use strict";' +
-		'var s,T=setTimeout,t,l=location,h=hotReloadId.style;' +
+		'var s,T=setTimeout,t,l=location,h=hotReloadId.style,' +
+		'v=hotReloadDiv.style,c=hotReloadSpan,b="backgroundColor";' +
 		'try{s=new WebSocket("ws://localhost:' + HOT_RELOAD_PORT +
 		'");}catch(e){return t=T(x,3000)}' +
-		's.onopen=function(){t&&clearTimeout(t);t=0;h.backgroundColor="lightgreen"};' +
-		's.onclose=function(){h.backgroundColor="lightgray";t=T(x,3000)};' +
-		's.onmessage=function(){l.href=l.href};' +
+		's.onopen=function(){t&&clearTimeout(t);t=0;v[b]=h[b]="lightgreen"};' +
+		's.onclose=function(){v[b]=h[b]="lightgray";t=T(x,3000)};' +
+		's.onmessage=function(e){' +
+		'if(e.data.substr(0,1)==="c")c.innerHTML=e.data.substr(1);' +
+		'if(e.data==="r")l.href=l.href};' +
 		'},0);</script>';
 
 	const TYPES = {
@@ -106,15 +110,20 @@ module.exports = function (dir, context) {
 			console.log(err + (err.filename ? ' file: ' + err.filename : '')));
 
 		// hot reload service
-		let list = [];
-		const RELOAD = () => list.forEach(s => s.send('reload'));
-		let timer = setTimeout(RELOAD, 5000);
+		let list = [], last;
+		const RELOAD = () => list.forEach(s => s.send('r'));
+		const COUNT = () => last !== list.length &&
+			(list.forEach(s => s.send('c'+list.length)), last = list.length, timer2 = 0);
+		let timer = setTimeout(RELOAD, 3000);
 		const ws = new (require('ws').Server)({port: HOT_RELOAD_PORT});
 		ws.on('connection', s => {
 			list.push(s.on('close', () => {
 				list = list.filter(x => x !== s);
+				COUNT();
 				console.log('ws:', list.length, 'connection' + (list.length !== 1 ? 's' : ''));
-			})); 
+			}));
+			s.send('c'+list.length);
+			COUNT();
 			console.log('ws:', list.length, 'connection' + (list.length !== 1 ? 's' : ''));
 		});
 		require('gulp').watch(DIST + '/**', () => {
