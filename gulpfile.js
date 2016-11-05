@@ -24,6 +24,9 @@ const SRC_FILES = [
 		'src/**/*.ico',
 		'src/**/*.json',
 		'src/**/*.js'];
+const FONTS_FILES = ['node_modules/bootstrap/dist/fonts/**/*.*'];
+const CSS_FILES = ['node_modules/bootstrap/dist/css/**/*.*'];
+const LIB_FILES = ['src/lib/**/*.js'];
 const MIN_FILES = [
 		'node_modules/react/dist/*.min.js*',
 		'node_modules/react-dom/dist/*.min.js*',
@@ -75,7 +78,17 @@ SRC_FILES.forEach(file =>
 		gulp.src(file)
 			.pipe(gulp.dest('dist/'))));
 
-gulp.task('copy-files', SRC_FILES.map(x => 'copy-' + x));
+FONTS_FILES.forEach(file =>
+	gulp.task('copy-' + file, () =>
+		gulp.src(file)
+			.pipe(gulp.dest('dist/fonts/'))));
+
+CSS_FILES.forEach(file =>
+	gulp.task('copy-' + file, () =>
+		gulp.src(file)
+			.pipe(gulp.dest('dist/css/'))));
+
+gulp.task('copy-files', SRC_FILES.concat(FONTS_FILES).concat(CSS_FILES).map(x => 'copy-' + x));
 
 gulp.task('copy-min-js', () =>
 	gulp.src(MIN_FILES)
@@ -85,7 +98,7 @@ gulp.task('build-all', ['build-jsx', 'copy-files', 'copy-min-js']);
 
 gulp.task('watch', () => (
 	X.forEach(x =>
-		gulp.watch('src/' + x + '/pub/jsx/*.js', ['build-jsx-' + x])),
+		gulp.watch(LIB_FILES.concat('src/' + x + '/pub/jsx/*.js'), ['build-jsx-' + x])),
 	SRC_FILES.forEach(file =>
 		gulp.watch(file, ['copy-' + file]))
 ));
