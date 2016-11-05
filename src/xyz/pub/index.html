@@ -6,6 +6,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
 <script src="/js/react.min.js"></script>
 <script src="/js/react-dom.min.js"></script>
 <!--<script src="/js/ReactRouter.min.js"></script>-->
@@ -16,34 +19,18 @@
 <script src="/js/promise-thunk.js"></script>
 <script src="/js/aa.js"></script>
 -->
-<script>
-function aa(gen) {
-	return function (cb) { void function next(err, val) {
-			try { var obj = err ? gen.throw(err) : gen.next(val);
-				obj.done ? cb(null, obj.value) : (obj.value)(next);
-			} catch (e) { cb(e); }
-	} (); };
-}
-aa.callback = function (gfn) {
-	return function () {
-		return aa(gfn.apply(this, arguments));
-	};
-};
-</script>
+<script src="/js/aa-pico.js"></script>
 <script src="/js/runtime.js"></script>
-
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">-->
-<link rel="stylesheet" href="/css/bootstrap.min.css">
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css">-->
-<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
 
 <title>XYZ</title>
 </head>
 <body>
 
 <div id="app"></div>
+<script src="js/bundle.js"></script>
+<!--
 <script src="js/bundle.min.js"></script>
-<!--<script src="js/bundle.js"></script>-->
+-->
 
 </body>
 </html>

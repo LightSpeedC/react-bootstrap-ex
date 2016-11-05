@@ -7,8 +7,7 @@ import AppHeader from './app-header';
 import AppFooter from './app-footer';
 import AppCenter from './app-center';
 
-import {Button} from 'react-bootstrap';
-import {FormGroup, FormControl, ControlLabel, HelpBlock} from 'react-bootstrap';
+//import {FormGroup, FormControl, ControlLabel, HelpBlock} from 'react-bootstrap';
 //import 'regenerator-runtime/runtime';
 //import request from 'light-request';
 //import aa from 'aa';
@@ -33,9 +32,13 @@ class MyCounter extends My.Component {
 		return <div>
 			counter: {this.state.counter}
 			<br/>
-			<My.PrimaryButton onClick={this.onPlus} children="plus ++"/>
-			<My.WarningButton onClick={this.onMinus} children="minus --"/>
-			<My.InfoButton onClick={this.onReset} children="reset"/>
+			<My.PrimaryButton bsSize="small" onClick={this.onPlus} children="plus ++"/>
+			<My.WarningButton bsSize="small" onClick={this.onMinus} children="minus --"/>
+			<My.InfoButton bsSize="small" onClick={this.onReset} children="reset"/>
+			<br/>
+			<My.PrimaryButton bsSize="small" onClick={() => this.setState(s => ({counter: s.counter + 1}))} children="plus ++"/>
+			<My.WarningButton bsSize="small" onClick={() => this.setState(s => ({counter: s.counter - 1}))} children="minus --"/>
+			<My.InfoButton bsSize="small" onClick={() => this.setState({counter: 0})} children="reset"/>
 		</div>;
 	}
 }
@@ -75,17 +78,46 @@ class App extends My.Component {
 	render() {
 		return <div>
 			<AppHeader/>
-			<MyCounter/>
-			<AppCenter/>
+			<My.Grid>
+				<My.Row>
+					<My.Col xs={12} md={2} style={{backgroundColor:'#ffe'}}>
+						<a href="/xyz/pub/">xyz</a>
+						<br/>
+						<a href="/ex01-react-intro-js/">ex01-react-intro-js</a>
+						<br/>
+						<a href="/ex02-react-intro-jsx/">ex02-react-intro-jsx</a>
+						<br/>
+						<a href="/ex11-react-bootstrap-jsx/">ex11-react-bootstrap-jsx</a>
+						<br/>
+						menu<br/>
+						menu<br/>
+						menu<br/>
+					</My.Col>
+					<My.Col xs={12} md={10}>
+						<My.Row style={{backgroundColor:'#eff'}}>
+							<My.Col xs={12} md={4} style={{backgroundColor:'#eef'}}>
+								<MyCounter/>
+							</My.Col>
+							<My.Col xs={12} md={8}>
+								<AppCenter/>
+							</My.Col>
+							<My.Col xs={12} md={12} style={{backgroundColor:'#efe'}}>
+								<Books list={this.state.books}/>
+							</My.Col>
+						</My.Row>
+						<My.Row style={{backgroundColor:'#fee'}}>
+							<My.Col xs={12} md={12}>
+								<My.TextControl placeholder="本の名前"
+									onChange={this.onChangeBookName}
+									value={this.state.bookName}
+								/>
+								<My.PrimaryButton onClick={this.onBookAdd}>book add</My.PrimaryButton>
+							</My.Col>
+						</My.Row>
+					</My.Col>
+				</My.Row>
+			</My.Grid>
 
-			<Books list={this.state.books}/>
-			<div>
-				<My.TextControl placeholder="本の名前"
-					onChange={this.onChangeBookName}
-					value={this.state.bookName}
-				/>
-				<My.PrimaryButton onClick={this.onBookAdd}>book add</My.PrimaryButton>
-			</div>
 			<AppFooter />
 		</div>;
 	}

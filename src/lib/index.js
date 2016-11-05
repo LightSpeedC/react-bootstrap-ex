@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {Button, FormControl} from 'react-bootstrap';
+//import ReactBootstrap from 'react-bootstrap';
 
 export class Component extends React.Component {
 	constructor(props) {
@@ -14,15 +14,31 @@ export class Component extends React.Component {
 	}
 }
 
+// Button ボタン
+export const Button = props =>
+	<ReactBootstrap.Button {...props}/>;
 export const PrimaryButton = props =>
-	<Button bsStyle="primary" {...props}/>;
+	<ReactBootstrap.Button bsStyle="primary" {...props}/>;
 export const SuccessButton = props =>
-	<Button bsStyle="success" {...props}/>;
+	<ReactBootstrap.Button bsStyle="success" {...props}/>;
 export const WarningButton = props =>
-	<Button bsStyle="warning" {...props}/>;
+	<ReactBootstrap.Button bsStyle="warning" {...props}/>;
 export const InfoButton = props =>
-	<Button bsStyle="info" {...props}/>;
+	<ReactBootstrap.Button bsStyle="info" {...props}/>;
 export const DangerButton = props =>
-	<Button bsStyle="danger" {...props}/>;
+	<ReactBootstrap.Button bsStyle="danger" {...props}/>;
+
+// FormControl
+export const FormControl = props =>
+	<ReactBootstrap.FormControl {...props}/>;
+// TextControl
 export const TextControl = props =>
-	<FormControl type="text" {...props}/>;
+	<ReactBootstrap.FormControl type="text" {...props}/>;
+
+// Grid, Row, Col
+export const Grid = props =>
+	<ReactBootstrap.Grid {...props}/>;
+export const Row = props =>
+	<ReactBootstrap.Row {...props}/>;
+export const Col = props =>
+	<ReactBootstrap.Col {...props}/>;
