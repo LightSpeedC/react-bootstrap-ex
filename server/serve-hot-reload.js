@@ -113,7 +113,7 @@ module.exports = function (dir, context) {
 		let list = [], last;
 		const RELOAD = () => list.forEach(s => s.send('r'));
 		const COUNT = () => last !== list.length &&
-			(list.forEach(s => s.send('c'+list.length)), last = list.length, timer2 = 0);
+			(list.forEach(s => s.send('c'+list.length)), last = list.length);
 		let timer = setTimeout(RELOAD, 3000);
 		const ws = new (require('ws').Server)({port: HOT_RELOAD_PORT});
 		ws.on('connection', s => {
