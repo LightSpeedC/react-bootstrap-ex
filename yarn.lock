@@ -2563,6 +2563,10 @@ process@~0.11.0:
   version "0.11.9"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.9.tgz#7bd5ad21aa6253e7da8682264f1e11d11c0318c1"
 
+promise-light:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/promise-light/-/promise-light-0.1.13.tgz#cbd9b4de29bf768eba1a2cbfed591cef40fe69ed"
+
 promise-thunk@>=0.1.16:
   version "0.1.16"
   resolved "https://registry.yarnpkg.com/promise-thunk/-/promise-thunk-0.1.16.tgz#3139831dd65bec508f7a8f8afd4e6491d70367ea"

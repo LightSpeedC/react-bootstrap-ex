@@ -13,11 +13,9 @@ import {FormGroup, FormControl, ControlLabel, HelpBlock} from 'react-bootstrap';
 //import request from 'light-request';
 //import aa from 'aa';
 
-import {MyComponent, TextControl,
-	PrimaryButton, SuccessButton, WarningButton, InfoButton, DangerButton
-} from '../../../lib';
+import * as My from '../../../lib';
 
-class MyCounter extends MyComponent {
+class MyCounter extends My.Component {
 	constructor(props) {
 		super(props);
 		this.state = {counter: 0};
@@ -35,9 +33,9 @@ class MyCounter extends MyComponent {
 		return <div>
 			counter: {this.state.counter}
 			<br/>
-			<PrimaryButton onClick={this.onPlus} children="plus ++"/>
-			<WarningButton onClick={this.onMinus} children="minus --"/>
-			<InfoButton onClick={this.onReset} children="reset"/>
+			<My.PrimaryButton onClick={this.onPlus} children="plus ++"/>
+			<My.WarningButton onClick={this.onMinus} children="minus --"/>
+			<My.InfoButton onClick={this.onReset} children="reset"/>
 		</div>;
 	}
 }
@@ -51,18 +49,16 @@ const Books = props =>
 		)}
 	</div>;
 
-class App extends MyComponent {
+class App extends My.Component {
 	constructor(props) {
 		super(props);
 		this.state = {books: [], bookName: ''};
 	}
 	componentWillMount() {
-		aa(this.getBooks())
-		.catch(err => console.error('getBooks:', err));
+		aa(this.getBooks())(e => e && console.error('getBooks:', e));
 	}
 	onBookAdd() {
-		aa(this.postBook())
-		.catch(err => console.error('postBook:', err));
+		aa(this.postBook())(e => e && console.error('postBook:', e));
 	}
 	onChangeBookName(e) {
 		this.setState({bookName: e.target.value});
@@ -84,11 +80,11 @@ class App extends MyComponent {
 
 			<Books list={this.state.books}/>
 			<div>
-				<TextControl placeholder="本の名前"
+				<My.TextControl placeholder="本の名前"
 					onChange={this.onChangeBookName}
 					value={this.state.bookName}
 				/>
-				<PrimaryButton onClick={this.onBookAdd}>book add</PrimaryButton>
+				<My.PrimaryButton onClick={this.onBookAdd}>book add</My.PrimaryButton>
 			</div>
 			<AppFooter />
 		</div>;

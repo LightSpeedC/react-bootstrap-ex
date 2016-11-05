@@ -17,7 +17,7 @@ const notifier   = require('node-notifier');
 const run        = require('run-sequence');
 const del        = require('del');
 
-const X = ['xyz', 'ex03-react-gulp'];
+const X = ['xyz', 'ex03-react-gulp', 'zzz'];
 const SRC_FILES = [
 		'src/**/*.html',
 		'src/**/*.css',
@@ -32,6 +32,7 @@ const MIN_FILES = [
 		'node_modules/regenerator-runtime/runtime.js',
 		'node_modules/light-request/light-request.js',
 		'node_modules/promise-thunk/promise-thunk.js',
+		'node_modules/promise-light/promise-light.js',
 		'node_modules/aa/aa.js'];
 
 X.forEach(x => {
@@ -93,4 +94,4 @@ gulp.task('clean', cb =>
 	del(['dist'], cb));
 
 gulp.task('default', cb =>
-	run('clean', 'build-all', 'watch', cb));
+	run('build-all', 'watch', cb));

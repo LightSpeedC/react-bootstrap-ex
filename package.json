@@ -22,6 +22,7 @@
     "literalify": "^0.4.0",
     "minimatch": "3",
     "node-notifier": "^4.6.1",
+    "promise-light": "^0.1.13",
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.5",
     "react-dom": "^15.3.2",

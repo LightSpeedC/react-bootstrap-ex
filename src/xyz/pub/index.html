@@ -12,19 +12,17 @@
 <script src="/js/react-bootstrap.min.js"></script>
 <script src="/js/light-request.js"></script>
 <!--
+<script src="/js/promise-light.js"></script>
 <script src="/js/promise-thunk.js"></script>
 <script src="/js/aa.js"></script>
 -->
 <script>
 function aa(gen) {
-	return new Promise(function (res, rej) {
-		void function cb(err, val) {
-			try {
-				var obj = err ? gen.throw(err) : gen.next(val);
-				obj.done ? res(obj.value) : (obj.value)(cb);
-			} catch (e) { rej(e); }
-		} ();
-	});
+	return function (cb) { void function next(err, val) {
+			try { var obj = err ? gen.throw(err) : gen.next(val);
+				obj.done ? cb(null, obj.value) : (obj.value)(next);
+			} catch (e) { cb(e); }
+	} (); };
 }
 aa.callback = function (gfn) {
 	return function () {

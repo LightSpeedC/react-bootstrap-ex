@@ -1,15 +1,13 @@
 'use strict';
 
-//const React = require('react');
-//const Button = require('react-bootstrap').Button;
 import React from 'react';
 import {Button, FormControl} from 'react-bootstrap';
 
-export class MyComponent extends React.Component {
+export class Component extends React.Component {
 	constructor(props) {
 		super(props);
 		Object.getOwnPropertyNames(this.constructor.prototype)
-			.filter(p => (p.startsWith('on') || p.startsWith('handle')) &&
+			.filter(p => (p.substr(0, 2) === 'on' || p.substr(0, 6) === 'handle') &&
 				typeof this[p] === 'function')
 			.forEach(p => Object.defineProperty(this, p,
 				{configurable: true, value: this[p].bind(this)}));
