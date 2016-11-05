@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+<script src="/js/react-bootstrap.min.js"></script>
+<script src="/js/light-request.js"></script>
+
+<div id="app1"></div>
+
+<script type="text/babel">
+const {Modal, Button, OverlayTrigger, Popover, Tooltip} = ReactBootstrap;
+const {Form, FormGroup, Col, ControlLabel, FormControl, Checkbox} = ReactBootstrap;
+const {ButtonGroup, ButtonToolbar, DropdownButton, MenuItem} = ReactBootstrap;
+
+const Example = props =>
+	<div>
+		<hr/>
+		Button groups ButtonGroup, ButtonToolbar<br/>
+		<ButtonGroup>
+			<Button>Left</Button>
+			<Button>Middle</Button>
+			<Button>Right</Button>
+		</ButtonGroup>
+		<hr/>
+
+		Button Toolbar<br/>
+		<ButtonToolbar>
+			<ButtonGroup>
+			<Button>1</Button>
+			<Button>2</Button>
+			<Button>3</Button>
+			<Button>4</Button>
+			</ButtonGroup>
+
+			<ButtonGroup>
+			<Button>5</Button>
+			<Button>6</Button>
+			<Button>7</Button>
+			</ButtonGroup>
+
+			<ButtonGroup>
+			<Button>8</Button>
+			</ButtonGroup>
+		</ButtonToolbar>
+		<hr/>
+
+		Sizing
+		<div>
+			<ButtonToolbar>
+			<ButtonGroup bsSize="large">
+				<Button>Left</Button>
+				<Button>Middle</Button>
+				<Button>Right</Button>
+			</ButtonGroup>
+			</ButtonToolbar>
+
+			<ButtonToolbar>
+			<ButtonGroup>
+				<Button>Left</Button>
+				<Button>Middle</Button>
+				<Button>Right</Button>
+			</ButtonGroup>
+			</ButtonToolbar>
+
+			<ButtonToolbar>
+			<ButtonGroup bsSize="small">
+				<Button>Left</Button>
+				<Button>Middle</Button>
+				<Button>Right</Button>
+			</ButtonGroup>
+			</ButtonToolbar>
+
+			<ButtonToolbar>
+			<ButtonGroup bsSize="xsmall">
+				<Button>Left</Button>
+				<Button>Middle</Button>
+				<Button>Right</Button>
+			</ButtonGroup>
+			</ButtonToolbar>
+		</div>
+		<hr/>
+
+		Nesting<br/>
+		<ButtonGroup>
+			<Button>1</Button>
+			<Button>2</Button>
+			<DropdownButton title="Dropdown" id="bg-nested-dropdown">
+			<MenuItem eventKey="1">Dropdown link</MenuItem>
+			<MenuItem eventKey="2">Dropdown link</MenuItem>
+			</DropdownButton>
+		</ButtonGroup>
+		<hr/>
+
+		Vertical variation<br/>
+		<ButtonGroup vertical>
+			<Button>Button</Button>
+			<Button>Button</Button>
+			<DropdownButton title="Dropdown" id="bg-vertical-dropdown-1">
+			<MenuItem eventKey="1">Dropdown link</MenuItem>
+			<MenuItem eventKey="2">Dropdown link</MenuItem>
+			</DropdownButton>
+			<Button>Button</Button>
+			<Button>Button</Button>
+			<DropdownButton title="Dropdown" id="bg-vertical-dropdown-2">
+			<MenuItem eventKey="1">Dropdown link</MenuItem>
+			<MenuItem eventKey="2">Dropdown link</MenuItem>
+			</DropdownButton>
+			<DropdownButton title="Dropdown" id="bg-vertical-dropdown-3">
+			<MenuItem eventKey="1">Dropdown link</MenuItem>
+			<MenuItem eventKey="2">Dropdown link</MenuItem>
+			</DropdownButton>
+		</ButtonGroup>
+		<ButtonGroup vertical block>
+			<Button>Full width button</Button>
+			<Button>Full width button</Button>
+		</ButtonGroup>
+		<hr/>
+
+		Justified button groups
+		<ButtonGroup justified>
+			<Button href="#">Left</Button>
+			<Button href="#">Middle</Button>
+			<DropdownButton title="Dropdown" id="bg-justified-dropdown">
+			<MenuItem eventKey="1">Dropdown link</MenuItem>
+			<MenuItem eventKey="2">Dropdown link</MenuItem>
+			</DropdownButton>
+		</ButtonGroup>
+		<hr/>
+	</div>;
+
+ReactDOM.render(<Example />, app1);
+</script>

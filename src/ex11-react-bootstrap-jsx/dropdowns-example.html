@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+<script src="/js/react-bootstrap.min.js"></script>
+<script src="/js/light-request.js"></script>
+
+<div id="app1"></div>
+
+<script type="text/babel">
+const {Modal, Button, OverlayTrigger, Popover, Tooltip} = ReactBootstrap;
+const {Form, FormGroup, Col, ControlLabel, FormControl, Checkbox} = ReactBootstrap;
+const {ButtonGroup, ButtonToolbar, MenuItem} = ReactBootstrap;
+const {DropdownButton, SplitButton, Dropdown, Glyphicon} = ReactBootstrap;
+
+const BUTTONS = ['Default', 'Primary', 'Success', 'Info', 'Warning', 'Danger', 'Link'];
+
+const Example = props =>
+	<div>
+		<hr/>
+		Single button dropdowns
+		<ButtonToolbar>{BUTTONS.map((title, i) =>
+			<DropdownButton bsStyle={title.toLowerCase()} title={title} key={i} id={`dropdown-basic-${i}`}>
+				<MenuItem eventKey="1">Action</MenuItem>
+				<MenuItem eventKey="2">Another action</MenuItem>
+				<MenuItem eventKey="3" active>Active Item</MenuItem>
+				<MenuItem divider />
+				<MenuItem eventKey="4">Separated link</MenuItem>
+			</DropdownButton>)}
+		</ButtonToolbar>
+		<hr/>
+
+		Split button dropdowns
+		<ButtonToolbar>{BUTTONS.map((title, i) =>
+			<SplitButton bsStyle={title.toLowerCase()} title={title} key={i} id={`split-button-basic-${i}`}>
+				<MenuItem eventKey="1">Action</MenuItem>
+				<MenuItem eventKey="2">Another action</MenuItem>
+				<MenuItem eventKey="3">Something else here</MenuItem>
+				<MenuItem divider />
+				<MenuItem eventKey="4">Separated link</MenuItem>
+			</SplitButton>)}
+		</ButtonToolbar>
+		<hr/>
+
+		Sizing
+		<div>
+			<ButtonToolbar>
+			<DropdownButton bsSize="large" title="Large button" id="dropdown-size-large">
+				<MenuItem eventKey="1">Action</MenuItem>
+				<MenuItem eventKey="2">Another action</MenuItem>
+				<MenuItem eventKey="3">Something else here</MenuItem>
+				<MenuItem divider />
+				<MenuItem eventKey="4">Separated link</MenuItem>
+			</DropdownButton>
+			</ButtonToolbar>
+
+			<ButtonToolbar>
+			<DropdownButton title="Default button" id="dropdown-size-medium">
+				<MenuItem eventKey="1">Action</MenuItem>
+				<MenuItem eventKey="2">Another action</MenuItem>
+				<MenuItem eventKey="3">Something else here</MenuItem>
+				<MenuItem divider />
+				<MenuItem eventKey="4">Separated link</MenuItem>
+			</DropdownButton>
+			</ButtonToolbar>
+
+			<ButtonToolbar>
+			<DropdownButton bsSize="small" title="Small button" id="dropdown-size-small">
+				<MenuItem eventKey="1">Action</MenuItem>
+				<MenuItem eventKey="2">Another action</MenuItem>
+				<MenuItem eventKey="3">Something else here</MenuItem>
+				<MenuItem divider />
+				<MenuItem eventKey="4">Separated link</MenuItem>
+			</DropdownButton>
+			</ButtonToolbar>
+
+			<ButtonToolbar>
+			<DropdownButton bsSize="xsmall" title="Extra small button" id="dropdown-size-extra-small">
+				<MenuItem eventKey="1">Action</MenuItem>
+				<MenuItem eventKey="2">Another action</MenuItem>
+				<MenuItem eventKey="3">Something else here</MenuItem>
+				<MenuItem divider />
+				<MenuItem eventKey="4">Separated link</MenuItem>
+			</DropdownButton>
+			</ButtonToolbar>
+		</div>
+		<hr/>
+
+		No caret variation
+		<ButtonToolbar>
+			<DropdownButton bsStyle="default" title="No caret" noCaret id="dropdown-no-caret">
+			<MenuItem eventKey="1">Action</MenuItem>
+			<MenuItem eventKey="2">Another action</MenuItem>
+			<MenuItem eventKey="3">Something else here</MenuItem>
+			<MenuItem divider />
+			<MenuItem eventKey="4">Separated link</MenuItem>
+			</DropdownButton>
+		</ButtonToolbar>
+		<hr/>
+
+		Dropup variation
+		<div>
+			<ButtonToolbar>
+			<SplitButton title="Dropup" dropup id="split-button-dropup">
+				<MenuItem eventKey="1">Action</MenuItem>
+				<MenuItem eventKey="2">Another action</MenuItem>
+				<MenuItem eventKey="3">Something else here</MenuItem>
+				<MenuItem divider />
+				<MenuItem eventKey="4">Separated link</MenuItem>
+			</SplitButton>
+			</ButtonToolbar>
+
+			<ButtonToolbar>
+			<SplitButton bsStyle="primary" title="Right dropup" dropup pullRight id="split-button-dropup-pull-right">
+				<MenuItem eventKey="1">Action</MenuItem>
+				<MenuItem eventKey="2">Another action</MenuItem>
+				<MenuItem eventKey="3">Something else here</MenuItem>
+				<MenuItem divider />
+				<MenuItem eventKey="4">Separated link</MenuItem>
+			</SplitButton>
+			</ButtonToolbar>
+		</div>
+		<hr/>
+
+		Dropdown right variation<br/>
+		<SplitButton title="Dropdown right" pullRight id="split-button-pull-right">
+			<MenuItem eventKey="1">Action</MenuItem>
+			<MenuItem eventKey="2">Another action</MenuItem>
+			<MenuItem eventKey="3">Something else here</MenuItem>
+			<MenuItem divider />
+			<MenuItem eventKey="4">Separated link</MenuItem>
+		</SplitButton>
+		<hr/>
+
+		Dropdown Customization
+		<ButtonToolbar>
+			<Dropdown id="dropdown-custom-1">
+			<Dropdown.Toggle>
+				<Glyphicon glyph="star" />
+				Pow! Zoom!
+			</Dropdown.Toggle>
+			<Dropdown.Menu className="super-colors">
+				<MenuItem eventKey="1">Action</MenuItem>
+				<MenuItem eventKey="2">Another action</MenuItem>
+				<MenuItem eventKey="3" active>Active Item</MenuItem>
+				<MenuItem divider />
+				<MenuItem eventKey="4">Separated link</MenuItem>
+			</Dropdown.Menu>
+			</Dropdown>
+
+			<Dropdown id="dropdown-custom-2">
+			<Button bsStyle="info">
+				mix it up style-wise
+			</Button>
+			<Dropdown.Toggle bsStyle="success"/>
+			<Dropdown.Menu className="super-colors">
+				<MenuItem eventKey="1">Action</MenuItem>
+				<MenuItem eventKey="2">Another action</MenuItem>
+				<MenuItem eventKey="3" active>Active Item</MenuItem>
+				<MenuItem divider />
+				<MenuItem eventKey="4">Separated link</MenuItem>
+			</Dropdown.Menu>
+			</Dropdown>
+
+		</ButtonToolbar>
+		<hr/>
+		<hr/>
+		<hr/>
+		<hr/>
+		<hr/>
+	</div>;
+
+ReactDOM.render(<Example />, app1);
+</script>

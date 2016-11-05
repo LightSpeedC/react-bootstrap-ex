@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+<script src="/js/react-bootstrap.min.js"></script>
+<script src="/js/light-request.js"></script>
+
+<div id="app1"></div>
+
+<script type="text/babel">
+const {ProgressBar} = ReactBootstrap;
+
+class Example extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {n:0};
+	}
+	componentWillMount() {
+		this.t = setInterval(() => this.setState(s => ({n: s.n + 10 > 100 ? 0 : s.n + 10})), 1000);
+	}
+	componentWillUnmount() {
+		clearInterval(this.t);
+	}
+  	render() {
+		return <div>
+			{this.state.n}
+			<ProgressBar active now={this.state.n} />
+		</div>;
+	}
+}
+
+ReactDOM.render(<Example />, app1)
+</script>

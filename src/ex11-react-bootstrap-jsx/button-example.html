@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+<script src="/js/react-bootstrap.min.js"></script>
+<script src="/js/light-request.js"></script>
+
+<div id="app1"></div>
+
+<script type="text/babel">
+const {Modal, Button, OverlayTrigger, Popover, Tooltip} = ReactBootstrap;
+const {Form, FormGroup, Col, ControlLabel, FormControl, Checkbox} = ReactBootstrap;
+const {ButtonToolbar} = ReactBootstrap;
+
+class LoadingButton extends React.Component {
+  	constructor(props) {
+		super(props);
+		this.state = {isLoading: false};
+		this.handleClick = this.handleClick.bind(this);
+  	}
+	render() {
+		let isLoading = this.state.isLoading;
+		return <Button
+			bsStyle="primary"
+			disabled={isLoading}
+			onClick={!isLoading ? this.handleClick : null}>
+			{isLoading ? 'Loading...' : 'Loading state'}
+		</Button>;
+	}
+	handleClick() {
+		this.setState({isLoading: true});
+
+		// This probably where you would have an `ajax` call
+		setTimeout(() => {
+			// Completed of async action, set loading state back
+			this.setState({isLoading: false});
+		}, 2000);
+	}
+}
+
+const Example = props =>
+	<div>
+		<hr/>
+		Buttons Button<br/>
+		Use any of the available button style types to quickly create a styled button. Just modify the bsStyle prop.
+		<ButtonToolbar>
+			{/* Standard button */}
+			<Button>Default</Button>
+
+			{/* Provides extra visual weight and identifies the primary action in a set of buttons */}
+			<Button bsStyle="primary">Primary</Button>
+
+			{/* Indicates a successful or positive action */}
+			<Button bsStyle="success">Success</Button>
+
+			{/* Contextual button for informational alert messages */}
+			<Button bsStyle="info">Info</Button>
+
+			{/* Indicates caution should be taken with this action */}
+			<Button bsStyle="warning">Warning</Button>
+
+			{/* Indicates a dangerous or potentially negative action */}
+			<Button bsStyle="danger">Danger</Button>
+
+			{/* Deemphasize a button by making it look like a link while maintaining button behavior */}
+			<Button bsStyle="link">Link</Button>
+		</ButtonToolbar>
+		<hr/>
+
+		Sizes<br/>
+		Fancy larger or smaller buttons? Add bsSize="large", bsSize="small", or bsSize="xsmall" for additional sizes.
+		<div>
+			<ButtonToolbar>
+			<Button bsStyle="primary" bsSize="large">Large button</Button>
+			<Button bsSize="large">Large button</Button>
+			</ButtonToolbar>
+			<ButtonToolbar>
+			<Button bsStyle="primary">Default button</Button>
+			<Button>Default button</Button>
+			</ButtonToolbar>
+			<ButtonToolbar>
+			<Button bsStyle="primary" bsSize="small">Small button</Button>
+			<Button bsSize="small">Small button</Button>
+			</ButtonToolbar>
+			<ButtonToolbar>
+			<Button bsStyle="primary" bsSize="xsmall">Extra small button</Button>
+			<Button bsSize="xsmall">Extra small button</Button>
+			</ButtonToolbar>
+		</div>
+		<hr/>
+
+		Create block level buttons—those that span the full width of a parent— by adding the block prop.
+		<div className="well" style={{maxWidth: 400, margin: '0 auto 10px'}}>
+			<Button bsStyle="primary" bsSize="large" block>Block level button</Button>
+			<Button bsSize="large" block>Block level button</Button>
+		</div>
+		<hr/>
+
+		Active state
+		<ButtonToolbar>
+			<Button bsStyle="primary" bsSize="large" active>Primary button</Button>
+			<Button bsSize="large" active>Button</Button>
+		</ButtonToolbar>
+		<hr/>
+
+		Button tags
+		<ButtonToolbar>
+			<Button href="#">Link</Button>
+			<Button>Button</Button>
+		</ButtonToolbar>
+		<hr/>
+
+		Disabled state
+		<ButtonToolbar>
+			<Button bsStyle="primary" bsSize="large" disabled>Primary button</Button>
+			<Button bsSize="large" disabled>Button</Button>
+		</ButtonToolbar>
+		<hr/>
+
+		Button loading state
+		<div>
+			<LoadingButton/>
+		</div>
+	</div>;
+
+ReactDOM.render(<Example />, app1);
+</script>
