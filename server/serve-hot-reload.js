@@ -77,7 +77,7 @@ module.exports = function (dir, context) {
 			for (let name of DEFAULTS)
 				if (names.indexOf(name) >= 0)
 					return resFile(file + name);
-			res.writeHead(200, {'content-type': 'text/html'});
+			res.writeHead(200, {'content-type': TYPES['.html']});
 			res.end('Directory: ' + req.url + '<br>\n' + names.map(x =>
 				'<a href="' + x + '">' + x + '</a><br>\n').join('') + HOT_RELOAD_SCRIPT);
 		}
@@ -119,7 +119,7 @@ module.exports = function (dir, context) {
 		});
 		require('gulp').watch(DIST + '/**', () => {
 			timer && clearTimeout(timer);
-			timer = setTimeout(RELOAD, 5000);
+			timer = setTimeout(RELOAD, 2000);
 		});
 
 	};
