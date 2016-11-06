@@ -145,9 +145,9 @@ module.exports = function (dir, context) {
 				'cache-control': 'max-age=3'});
 			const results = yield names.map(name => cb =>
 				fs.stat(path.join(dir, name), (e, stat) => cb(e, {name, stat})));
-			res.end('Directory: ' + req.url + '<br>\n' + results.map(x => {
+			res.end('Directory: ' + req.url + '<br/>\n' + results.map(x => {
 				if (x.stat.isDirectory()) x.name += '/';
-				return '<a href="' + x.name + '">' + x.name + '</a><br>\n';
+				return '<a href="' + x.name + '">' + x.name + '</a><br/>\n';
 			}).join('') + HOT_RELOAD_SCRIPT);
 		}
 
