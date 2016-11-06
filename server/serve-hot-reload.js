@@ -16,7 +16,7 @@ module.exports = function (dir, context) {
 	const colors = {
 		black: csi + '30m', red: csi + '31m', green: csi + '32m',
 		yellow: csi + '33m', blue: csi + '34m', magenta: csi + '35m',
-		cyan: csi + '36m', white: csi + '37m'}
+		cyan: csi + '36m', white: csi + '37m', gray: csi + '90m'}
 	const bgColors = {
 		bgBlack: csi + '40m', bgRed: csi + '41m', bgGreen: csi + '42m',
 		bgYellow: csi + '43m', bgBlue: csi + '44m', bgMagenta: csi + '45m',
@@ -35,8 +35,10 @@ module.exports = function (dir, context) {
 
 	const HOT_RELOAD_SCRIPT =
 		'<hr id="hotReloadId" style="height: 1px; border: none;"/>'+
-		'<div id="hotReloadDiv">(<span id="hotReloadSpan"></span>) <a href="/">home</a> / ' +
-		'<a href="..">prev</a> / <a href=".">cur</a></div>' +
+		'<div id="hotReloadDiv">(<span id="hotReloadSpan">0</span>) ' +
+		'<a href="#" onclick="location.href=location.href">reload</a> / ' +
+		'<a href="/">home</a> / ' +
+		'<a href="..">..</a> / <a href=".">.</a></div>' +
 		'<script>setTimeout(function x(){"use strict";' +
 		'var s,T=setTimeout,t,l=location,h=hotReloadId.style,' +
 		'v=hotReloadDiv.style,c=hotReloadSpan,b="backgroundColor";' +
@@ -61,19 +63,27 @@ module.exports = function (dir, context) {
 
 	const onRequest = aa.callback(function *(req, res) {
 		const start = process.hrtime(); // 開始時刻
-		res.end = (end => function () { // 終了時にログ出力
+		let len = 0;
+		res.write = (write => function (buf) { // 終了時にログ出力
+			len += buf.length;
+			write.apply(this, arguments);
+		}) (res.write);
+		res.end = (end => function (buf) { // 終了時にログ出力
+			if (buf && buf.length) len += buf.length;
 			const delta = process.hrtime(start); // 時刻の差
-			let msg = res.statusCode + ' ' +
-				(delta[0] * 1e3 + delta[1] / 1e6).toFixed(3) + ' msec ' +
-				req.method + ' ' + req.url + ' ' +
-				http.STATUS_CODES[res.statusCode];
+			let msg = res.statusCode + ' ';
 			if (res.statusCode < 300) msg = msg.green;
 			else if (res.statusCode < 400) msg = msg.cyan;
 			else msg = msg.red;
+			let t = delta[0] * 1e3 + delta[1] / 1e6, time = t.toFixed(3) + ' msec ';
+			if (t < 10) time = '  ' + time.green;
+			else if (t < 100) time = ' ' + time.yellow;
+			else time = time.red;
+			msg = msg + time +
+				(' - ' + res.statusCode + ' ' + http.STATUS_CODES[res.statusCode]).gray +
+				(' -' + ('     ' + (len / 1e3).toFixed(3)).substr(-9) + ' KB ').gray +
+				req.method + ' ' + req.url
 			console.log(msg);
-			//console.log('%d', res.statusCode,
-			//	(delta[0] * 1e3 + delta[1] / 1e6).toFixed(3), 'msec',
-			//	req.method, req.url);
 			end.apply(this, arguments);
 		}) (res.end);
 
@@ -97,7 +107,12 @@ module.exports = function (dir, context) {
 
 		function resFile(file) { // ファイルを応答
 			const ext = path.extname(file);
-			res.writeHead(200, {'content-type': TYPES[ext] || 'text/plain'});
+			let maxAge = 10; // 10秒
+			if (req.url.startsWith('/js/') ||
+				req.url.startsWith('/css/') ||
+				req.url.startsWith('/favicon')) maxAge = 600; // 10分
+			res.writeHead(200, {'content-type': TYPES[ext] || 'text/plain',
+				'cache-control': 'max-age=' + maxAge});
 			fs.createReadStream(file).on('error', resError)
 				.on('end', () => res.end(ext !== '.html' ? undefined: HOT_RELOAD_SCRIPT))
 				.pipe(res, {end:false});
@@ -108,7 +123,8 @@ module.exports = function (dir, context) {
 			for (let name of DEFAULTS)
 				if (names.indexOf(name) >= 0)
 					return resFile(file + name);
-			res.writeHead(200, {'content-type': TYPES['.html']});
+			res.writeHead(200, {'content-type': TYPES['.html'],
+				'cache-control': 'max-age=5'});
 			res.end('Directory: ' + req.url + '<br>\n' + names.map(x =>
 				'<a href="' + x + '">' + x + '</a><br>\n').join('') + HOT_RELOAD_SCRIPT);
 		}
@@ -122,7 +138,8 @@ module.exports = function (dir, context) {
 			const msg = (err + '').replace(DIST, '*');
 			console.error(msg.bgRed.bgLight);
 			if (code instanceof Error) err = code, code = 500;
-			res.writeHead(code, {'content-type': 'text/html'});
+			res.writeHead(code, {'content-type': TYPES['.html'],
+				'cache-control': 'max-age=5'});
 			res.end('<h2>' + code + ' ' + http.STATUS_CODES[code] + '</h2>\n' +
 				'<h3>' + msg + '</h3>\n' + HOT_RELOAD_SCRIPT);
 		}
@@ -138,23 +155,29 @@ module.exports = function (dir, context) {
 
 		// hot reload service
 		let list = [], last;
-		const RELOAD = () => list.forEach(s => s.send('r'));
-		const COUNT = () => last !== list.length &&
-			(list.forEach(s => s.send('c'+list.length)), last = list.length);
-		let timer = setTimeout(RELOAD, 3000);
+		const sendReload = () => list.forEach(s => {
+			try { s.send('r');
+			} catch (e) { console.error(('reload fail: ' + e).red); }
+		});
+		const sendCount = m => { last !== list.length && (last = list.length,
+			list.forEach(s => {
+				try { s.send('c' + last);
+				} catch (e) { console.error(('send count fail: ' + e).red); }
+			}));
+			console.log(m + ('   ' + last).substr(-4) + ' conn');
+		};
+		let timer = setTimeout(sendReload, 3000);
 		const ws = require('ws').createServer({port: HOT_RELOAD_PORT}, s => {
 			list.push(s.on('close', () => {
 				list = list.filter(x => x !== s);
-				COUNT();
-				console.log('ws-'.magenta, list.length, 'connection' + (list.length !== 1 ? 's' : ''));
-			}));
+				sendCount('ws-'.magenta);
+			}).on('error', e => console.error(('s fail: ' + e).bgRed.bgLight)));
 			s.send('c'+list.length);
-			COUNT();
-			console.log('ws+'.cyan, list.length, 'connection' + (list.length !== 1 ? 's' : ''));
-		});
+			sendCount('ws+'.cyan);
+		}).on('error', e => console.error(('ws fail: ' + e).bgRed.bgLight));
 		require('gulp').watch(DIST + '/**', () => {
 			timer && clearTimeout(timer);
-			timer = setTimeout(RELOAD, 2000);
+			timer = setTimeout(sendReload, 2000);
 		});
 
 	};
