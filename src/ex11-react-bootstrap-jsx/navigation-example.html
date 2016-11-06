@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+<script src="/js/react-bootstrap.min.js"></script>
+<script src="/js/light-request.js"></script>
+
+<div id="app1"></div>
+
+<script type="text/babel">
+const {Modal, Button, OverlayTrigger, Popover, Tooltip} = ReactBootstrap;
+const {Nav, NavItem} = ReactBootstrap;
+
+function handleSelect(selectedKey) {
+  alert('selected ' + selectedKey);
+}
+
+class Example extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {showModal: false};
+		//this.close = this.close.bind(this);
+		//this.open = this.open.bind(this);
+		this.close = e => this.setState({showModal: false});
+		this.open = e => this.setState({showModal: true});
+	}
+
+//	close() {
+//		this.setState({showModal: false});
+//	}
+
+//	open() {
+//		this.setState({showModal: true});
+//	}
+
+	render() {
+		return (
+			<div>
+				<hr/>
+				Navs Nav, NavItem
+				<Nav bsStyle="pills" activeKey={1} onSelect={handleSelect}>
+					<NavItem eventKey={1} href="/home">NavItem 1 content</NavItem>
+					<NavItem eventKey={2} title="Item">NavItem 2 content</NavItem>
+					<NavItem eventKey={3} disabled>NavItem 3 content</NavItem>
+				</Nav>
+				<hr/>
+				<hr/>
+			</div>
+		);
+	}
+}
+
+class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {show1: 0};
+	}
+	render() {
+		return <div>
+			<hr/>
+			<Example />
+			<hr/>
+		</div>;
+	}
+}
+
+ReactDOM.render(<App/>, app1);
+</script>

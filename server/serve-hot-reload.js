@@ -6,10 +6,28 @@ module.exports = function (dir, context) {
 	const fs = require('fs');
 
 	//const aa = require('aa');
+	//const aa = require('../src/js/aa-pico');
+	/*
 	const aa = gen => function cb(err, val) {
 		const obj = err ? gen.throw(err) : gen.next(val);
 		obj.done || obj.value(cb); } ();
 	aa.callback = gfn => (req, res, next) => aa(gfn(req, res, next));
+	*/
+	const array2thunk = arr => cb => {
+		let n = arr.length, res = new Array(n);
+		arr.forEach((f, i) => f((e, v) => (
+			e ? n > 0 && (cb(e), n = 0) :
+			res[i] = v, --n || cb(null, res)))); };
+	const aa = gen => cb => function next(err, val) {
+		try {
+			const obj = err ? gen.throw(err) : gen.next(val);
+			val = obj.value;
+			obj.done ? cb && cb(null, val) :
+			(typeof val === 'function' ?
+			val : array2thunk(val))(next);
+		} catch (e) { if (cb) cb(e); else throw e; }
+	} ();
+	aa.callback = gfn => (req, res, next) => aa(gfn(req, res, next))();
 
 	// color
 	const csi = '\x1b['; // control sequence introducer
@@ -36,9 +54,8 @@ module.exports = function (dir, context) {
 	const HOT_RELOAD_SCRIPT =
 		'<hr id="hotReloadId" style="height: 1px; border: none;"/>'+
 		'<div id="hotReloadDiv">(<span id="hotReloadSpan">0</span>) ' +
-		'<a href="#" onclick="location.href=location.href">reload</a> / ' +
-		'<a href="/">home</a> / ' +
-		'<a href="..">..</a> / <a href=".">.</a></div>' +
+		'<a href="#" onclick="location.href=location.href">更新</a> / ' +
+		'<a href="/">ホーム■</a> / <a href="..">上▲</a> / <a href=".">ココ●</a></div>' +
 		'<script>setTimeout(function x(){"use strict";' +
 		'var s,T=setTimeout,t,l=location,h=hotReloadId.style,' +
 		'v=hotReloadDiv.style,c=hotReloadSpan,b="backgroundColor";' +
@@ -79,11 +96,12 @@ module.exports = function (dir, context) {
 			if (t < 10) time = '  ' + time.green;
 			else if (t < 100) time = ' ' + time.yellow;
 			else time = time.red;
-			msg = msg + time +
-				(' - ' + res.statusCode + ' ' + http.STATUS_CODES[res.statusCode]).gray +
-				(' -' + ('     ' + (len / 1e3).toFixed(3)).substr(-9) + ' KB ').gray +
+			msg = msg + time + (' - ' + res.statusCode + ' ' +
+				http.STATUS_CODES[res.statusCode] + ' -' +
+				('     ' + (len / 1e3).toFixed(3)).substr(-9) + ' KB ').gray +
 				req.method + ' ' + req.url
 			console.log(msg);
+			console.log('res.headers:', res.headers);
 			end.apply(this, arguments);
 		}) (res.end);
 
@@ -107,7 +125,7 @@ module.exports = function (dir, context) {
 
 		function resFile(file) { // ファイルを応答
 			const ext = path.extname(file);
-			let maxAge = 10; // 10秒
+			let maxAge = 3; // 3秒
 			if (req.url.startsWith('/js/') ||
 				req.url.startsWith('/css/') ||
 				req.url.startsWith('/favicon')) maxAge = 600; // 10分
@@ -124,9 +142,13 @@ module.exports = function (dir, context) {
 				if (names.indexOf(name) >= 0)
 					return resFile(file + name);
 			res.writeHead(200, {'content-type': TYPES['.html'],
-				'cache-control': 'max-age=5'});
-			res.end('Directory: ' + req.url + '<br>\n' + names.map(x =>
-				'<a href="' + x + '">' + x + '</a><br>\n').join('') + HOT_RELOAD_SCRIPT);
+				'cache-control': 'max-age=3'});
+			const results = yield names.map(name => cb =>
+				fs.stat(path.join(dir, name), (e, stat) => cb(e, {name, stat})));
+			res.end('Directory: ' + req.url + '<br>\n' + results.map(x => {
+				if (x.stat.isDirectory()) x.name += '/';
+				return '<a href="' + x.name + '">' + x.name + '</a><br>\n';
+			}).join('') + HOT_RELOAD_SCRIPT);
 		}
 
 		function resRedirect(code, loc) { // リダイレクトさせる
@@ -139,7 +161,7 @@ module.exports = function (dir, context) {
 			console.error(msg.bgRed.bgLight);
 			if (code instanceof Error) err = code, code = 500;
 			res.writeHead(code, {'content-type': TYPES['.html'],
-				'cache-control': 'max-age=5'});
+				'cache-control': 'max-age=3'});
 			res.end('<h2>' + code + ' ' + http.STATUS_CODES[code] + '</h2>\n' +
 				'<h3>' + msg + '</h3>\n' + HOT_RELOAD_SCRIPT);
 		}
@@ -155,10 +177,12 @@ module.exports = function (dir, context) {
 
 		// hot reload service
 		let list = [], last;
-		const sendReload = () => list.forEach(s => {
-			try { s.send('r');
-			} catch (e) { console.error(('reload fail: ' + e).red); }
-		});
+		const sendReload = () => { console.log('***   ***** dist updated - send reload');
+			list.forEach(s => {
+				try { s.send('r');
+				} catch (e) { console.error(('reload fail: ' + e).red); }
+			});
+		};
 		const sendCount = m => { last !== list.length && (last = list.length,
 			list.forEach(s => {
 				try { s.send('c' + last);

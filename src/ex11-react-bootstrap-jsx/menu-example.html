@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+<script src="/js/react-bootstrap.min.js"></script>
+<script src="/js/light-request.js"></script>
+
+<div id="app1"></div>
+
+<script type="text/babel">
+const {Modal, Button, OverlayTrigger, Popover, Tooltip} = ReactBootstrap;
+const {Form, FormGroup, Col, ControlLabel, FormControl, Checkbox} = ReactBootstrap;
+const {ButtonToolbar} = ReactBootstrap;
+const {Clearfix, MenuItem} = ReactBootstrap;
+
+function onSelectAlert(eventKey) {
+	alert(`Alert from menu item.\neventKey: ${eventKey}`);
+}
+
+const Example = props =>
+	<div>
+		<hr/>
+		Menu items
+		<Clearfix>
+			<ul className="dropdown-menu open">
+			<MenuItem header>Header</MenuItem>
+			<MenuItem>link</MenuItem>
+			<MenuItem divider/>
+			<MenuItem header>Header</MenuItem>
+			<MenuItem>link</MenuItem>
+			<MenuItem disabled>disabled</MenuItem>
+			<MenuItem title="See? I have a title.">
+				link with title
+			</MenuItem>
+			<MenuItem eventKey={1} href="#someHref" onSelect={onSelectAlert}>
+				link that alerts
+			</MenuItem>
+			</ul>
+		</Clearfix>
+		うまく動かん
+		<hr/>
+
+	</div>;
+
+ReactDOM.render(<Example />, app1);
+</script>
