@@ -101,7 +101,7 @@ module.exports = function (dir, context) {
 				('     ' + (len / 1e3).toFixed(3)).substr(-9) + ' KB ').gray +
 				req.method + ' ' + req.url
 			console.log(msg);
-			console.log('res.headers:', res.headers);
+			//console.log('res.headers:', res.headers);
 			end.apply(this, arguments);
 		}) (res.end);
 
