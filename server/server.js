@@ -10,11 +10,13 @@ void function () {
 	console.log(context);
 
 	// ボディーパーサー
+	app.set('json spaces', '  ');
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended: false}));
 
 	// XYZ API
 	app.use('/xyz/api', require('./xyz-api')(context));
+	app.use('/lib/api', require('./lib-api')(context));
 
 	// 静的ファイルとディレクトリ一覧
 	const onRequest = require('./serve-hot-reload')(dir, context);
