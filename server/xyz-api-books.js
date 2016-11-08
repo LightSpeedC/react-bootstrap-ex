@@ -13,7 +13,7 @@ module.exports = function (context) {
 		const book = req.body;
 		book.id = books.id++;
 		books.list.push(book);
-		res.json(book.id);
+		res.json(books.list);
 	});
 
 	router.put('/:id', (req, res) => {

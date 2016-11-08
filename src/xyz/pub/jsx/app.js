@@ -72,9 +72,8 @@ class App extends My.Component {
 		this.setState({books: res.body});
 	}
 	*postBook() {
-		yield request.post('/xyz/api/books', {name:this.state.bookName});
-		yield *this.getBooks();
-		this.setState({bookName: ''});
+		const res = yield request.post('/xyz/api/books', {name:this.state.bookName});
+		this.setState({books: res.body, bookName: ''});
 	}
 	render() {
 		return <div>
