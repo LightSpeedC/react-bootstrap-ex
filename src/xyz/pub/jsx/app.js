@@ -48,15 +48,17 @@ const Books = props =>
 	<div>
 		{props.list.map(b =>
 			<div>
-				{b.id}: <b>{b.name}</b>
+				<button onClick={()=> props.onClick && props.onClick(b)}>x</button> {b.id}: <b>{b.name}</b>
 			</div>
 		)}
 	</div>;
 
+const SIZE = 10;
+
 class App extends My.Component {
 	constructor(props) {
 		super(props);
-		this.state = {books: [], bookName: ''};
+		this.state = {books: [], bookName: '', offset: 0, length: 0};
 	}
 	componentWillMount() {
 		aa(this.getBooks())(e => e && console.error('getBooks:', e));
@@ -67,13 +69,32 @@ class App extends My.Component {
 	onChangeBookName(e) {
 		this.setState({bookName: e.target.value});
 	}
+	onBookRemove(b) {
+		//console.log('onBookRemove', b)
+		aa(this.removeBook(b))(e => e && console.error('postBook:', e));
+	}
 	*getBooks() {
-		const res = yield request.get('/xyz/api/books');
-		this.setState({books: res.body});
+		const res = yield request.get('/xyz/api/books?size=' + SIZE + '&offset=' + this.state.offset);
+		this.setState({books: res.body.result, length: res.body.length});
+		//console.log('getBooks end')
 	}
 	*postBook() {
 		const res = yield request.post('/xyz/api/books', {name:this.state.bookName});
-		this.setState({books: res.body, bookName: ''});
+		this.state.offset = Math.floor(res.body.result.id / SIZE);
+		aa(this.getBooks())(e => e && console.error('getBooks:', e));
+		this.setState({bookName: ''});
+	}
+	*removeBook(b) {
+		const res = yield request.delete('/xyz/api/books/' + b.id);
+		const offset = Math.min(this.state.offset, Math.floor((res.body.length + SIZE - 1) / SIZE) - 1);
+		this.setState({length: res.body.length, offset});
+		aa(this.getBooks())(e => e && console.error('getBooks:', e));
+	}
+	handleSelect(page) {
+		this.state.offset = page - 1;
+		this.setState({offset: page - 1});
+		aa(this.getBooks())(e => e && console.error('getBooks:', e));
+		this.setState({offset: page - 1});
 	}
 	render() {
 		return <div>
@@ -117,7 +138,19 @@ class App extends My.Component {
 								<AppCenter/>
 							</My.Col>
 							<My.Col xs={12} md={12} style={{backgroundColor:'#efe'}}>
-								<Books list={this.state.books}/>
+
+offset:{this.state.offset} length:{this.state.length}<br/>
+
+      <ReactBootstrap.Pagination
+        prev next first last
+        ellipsis boundaryLinks
+        items={Math.floor((this.state.length + SIZE - 1) / SIZE)}
+        maxButtons={5}
+        activePage={this.state.offset + 1}
+        onSelect={this.handleSelect} />
+
+								<Books list={this.state.books} onClick={this.onBookRemove}/>
+
 							</My.Col>
 						</My.Row>
 						<My.Row style={{backgroundColor:'#fee'}}>
