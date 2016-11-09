@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<script src="/js/react.min.js"></script>
+<script src="/js/react-dom.min.js"></script>
+<script src="/js/browser.min.js"></script>
+
+JSX
+
+<div id="app1"></div>
+<script type="text/babel">
+
+const pageSize = 100;
+function range(n) {
+	const arr = [];
+	for (let i = 0; i < n; ++i)
+		arr.push(i);
+	return arr;
+}
+
+class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {n:0};
+		this.list = [];
+		for (let i = 0; i < 1e3; ++i)
+			this.list.push({id:i, name:'name'+i});
+	}
+	onclick(n) {
+		this.setState({n:n})
+	}
+	render() {
+		return <div>
+				<h1>Hello, world! (app1)</h1>
+				{range(this.list.length/pageSize)
+					.map(x => <button onClick={()=>this.onclick(x)}>{x}</button>)}
+				<ul>
+				{this.list.slice(pageSize*this.state.n, pageSize*this.state.n+pageSize)
+					.map(x => <li>{x.id}: {x.name}</li>)}
+				</ul>
+			</div>;
+	}
+}
+
+ReactDOM.render(<App/>, app1);
+</script>
+<hr>
