@@ -14,7 +14,7 @@ module.exports = function (context) {
 		//console.log(req.query);
 		const offset = Number(req.query.offset || 0);
 		const size = Number(req.query.size || SIZE);
-		res.json({result: books.list.slice(offset * size, offset * size + size),
+		res.json({result: books.list.slice(offset, offset + size),
 			length: books.list.length, offset, size});
 	});
 

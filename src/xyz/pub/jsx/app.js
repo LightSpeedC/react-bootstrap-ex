@@ -58,43 +58,41 @@ const SIZE = 10;
 class App extends My.Component {
 	constructor(props) {
 		super(props);
-		this.state = {books: [], bookName: '', offset: 0, length: 0};
+		this.state = {books: [], bookName: '', page: 1, length: 0};
 	}
 	componentWillMount() {
-		aa(this.getBooks())(e => e && console.error('getBooks:', e));
+		aa(this.getBooks(1))
+			(err => err && console.error('getBooks:', err));
 	}
 	onBookAdd() {
-		aa(this.postBook())(e => e && console.error('postBook:', e));
+		aa(this.postBook({name: this.state.bookName}))
+			(err => err && console.error('postBook:', err));
 	}
-	onChangeBookName(e) {
-		this.setState({bookName: e.target.value});
-	}
-	onBookRemove(b) {
-		//console.log('onBookRemove', b)
-		aa(this.removeBook(b))(e => e && console.error('postBook:', e));
-	}
-	*getBooks() {
-		const res = yield request.get('/xyz/api/books?size=' + SIZE + '&offset=' + this.state.offset);
-		this.setState({books: res.body.result, length: res.body.length});
-		//console.log('getBooks end')
-	}
-	*postBook() {
-		const res = yield request.post('/xyz/api/books', {name:this.state.bookName});
-		this.state.offset = Math.floor(res.body.result.id / SIZE);
-		aa(this.getBooks())(e => e && console.error('getBooks:', e));
-		this.setState({bookName: ''});
-	}
-	*removeBook(b) {
-		const res = yield request.delete('/xyz/api/books/' + b.id);
-		const offset = Math.min(this.state.offset, Math.floor((res.body.length + SIZE - 1) / SIZE) - 1);
-		this.setState({length: res.body.length, offset});
-		aa(this.getBooks())(e => e && console.error('getBooks:', e));
+	onBookRemove(book) {
+		aa(this.removeBook(book))
+			(err => err && console.error('postBook:', err));
 	}
 	handleSelect(page) {
-		this.state.offset = page - 1;
-		this.setState({offset: page - 1});
-		aa(this.getBooks())(e => e && console.error('getBooks:', e));
-		this.setState({offset: page - 1});
+		aa(this.getBooks(page))
+			(err => err && console.error('getBooks:', err));
+	}
+	onChangeBookName(event) {
+		this.setState({bookName: event.target.value});
+	}
+	*getBooks(page) {
+		const res = yield request.get('/xyz/api/books?size=' + SIZE + '&offset=' + (page - 1) * SIZE);
+		this.setState({books: res.body.result, length: res.body.length, page});
+	}
+	*postBook(book) {
+		const res = yield request.post('/xyz/api/books', book);
+		const page = Math.floor((res.body.length + SIZE - 1) / SIZE);
+		this.setState({bookName: ''});
+		yield *this.getBooks(page);
+	}
+	*removeBook(book) {
+		const res = yield request.delete('/xyz/api/books/' + book.id);
+		const page = Math.min(this.state.page, Math.floor((res.body.length + SIZE - 1) / SIZE));
+		yield *this.getBooks(page);
 	}
 	render() {
 		return <div>
@@ -139,14 +137,14 @@ class App extends My.Component {
 							</My.Col>
 							<My.Col xs={12} md={12} style={{backgroundColor:'#efe'}}>
 
-offset:{this.state.offset} length:{this.state.length}<br/>
+page:{this.state.page} length:{this.state.length}<br/>
 
       <ReactBootstrap.Pagination
         prev next first last
         ellipsis boundaryLinks
         items={Math.floor((this.state.length + SIZE - 1) / SIZE)}
         maxButtons={5}
-        activePage={this.state.offset + 1}
+        activePage={this.state.page}
         onSelect={this.handleSelect} />
 
 								<Books list={this.state.books} onClick={this.onBookRemove}/>
