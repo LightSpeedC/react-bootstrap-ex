@@ -11,6 +11,9 @@ void function () {
 
 	process.title = 'server on port: ' + context.port + ', hot reload port: ' + context.hot_reload_port;
 
+	// ログ
+	app.use(require('./serve-log'));
+
 	// ボディーパーサー
 	app.set('json spaces', '  ');
 	app.use(bodyParser.json());

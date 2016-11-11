@@ -60,9 +60,9 @@ module.exports = function (dir, context) {
 		'var s,T=setTimeout,t,l=location,h=hotReloadId.style,' +
 		'v=hotReloadDiv.style,c=hotReloadSpan,b="backgroundColor";' +
 		'try{s=new WebSocket("ws://localhost:' + HOT_RELOAD_PORT +
-		'");}catch(e){return t=T(x,3000)}' +
+		'");}catch(e){return t=T(x,2000)}' +
 		's.onopen=function(){t&&clearTimeout(t);t=0;v[b]=h[b]="lightgreen"};' +
-		's.onclose=function(){v[b]=h[b]="lightgray";t=T(x,3000)};' +
+		's.onclose=function(){v[b]=h[b]="lightgray";t=T(x,2000)};' +
 		's.onmessage=function(e){' +
 		'if(e.data.substr(0,1)==="c")c.innerHTML=e.data.substr(1);' +
 		'if(e.data==="r")l.href=l.href};' +
@@ -79,32 +79,6 @@ module.exports = function (dir, context) {
 	const DEFAULTS = ['index.html', 'index.htm', 'default.html'];
 
 	const onRequest = aa.callback(function *(req, res) {
-		const start = process.hrtime(); // 開始時刻
-		let len = 0;
-		res.write = (write => function (buf) { // 終了時にログ出力
-			len += buf.length;
-			write.apply(this, arguments);
-		}) (res.write);
-		res.end = (end => function (buf) { // 終了時にログ出力
-			if (buf && buf.length) len += buf.length;
-			const delta = process.hrtime(start); // 時刻の差
-			let msg = res.statusCode + ' ';
-			if (res.statusCode < 300) msg = msg.green;
-			else if (res.statusCode < 400) msg = msg.cyan;
-			else msg = msg.red;
-			let t = delta[0] * 1e3 + delta[1] / 1e6, time = t.toFixed(3) + ' msec ';
-			if (t < 10) time = '  ' + time.green;
-			else if (t < 100) time = ' ' + time.yellow;
-			else time = time.red;
-			msg = msg + time + (' - ' + res.statusCode + ' ' +
-				http.STATUS_CODES[res.statusCode] + ' -' +
-				('     ' + (len / 1e3).toFixed(3)).substr(-9) + ' KB ').gray +
-				req.method + ' ' + req.url
-			console.log(msg);
-			//console.log('res.headers:', res.headers);
-			end.apply(this, arguments);
-		}) (res.end);
-
 		const file = path.join(DIST, req.url); // 実際のファイル名
 		if (!file.startsWith(DIST)) // 悪意のある要求は除外
 			return resError(418, new Error('malicious? ' + req.url));
@@ -125,7 +99,7 @@ module.exports = function (dir, context) {
 
 		function resFile(file) { // ファイルを応答
 			const ext = path.extname(file);
-			let maxAge = 3; // 3秒
+			let maxAge = 0; // 0秒
 			if (req.url.startsWith('/js/') ||
 				req.url.startsWith('/css/') ||
 				req.url.startsWith('/favicon')) maxAge = 600; // 10分
@@ -190,7 +164,7 @@ module.exports = function (dir, context) {
 			}));
 			console.log(m + ('   ' + last).substr(-4) + ' conn');
 		};
-		let timer = setTimeout(sendReload, 3000);
+		let timer = setTimeout(sendReload, 5000);
 		const ws = require('ws').createServer({port: HOT_RELOAD_PORT}, s => {
 			list.push(s.on('close', () => {
 				list = list.filter(x => x !== s);
@@ -201,7 +175,7 @@ module.exports = function (dir, context) {
 		}).on('error', e => console.error(('ws fail: ' + e).bgRed.bgLight));
 		require('gulp').watch(DIST + '/**', () => {
 			timer && clearTimeout(timer);
-			timer = setTimeout(sendReload, 2000);
+			timer = setTimeout(sendReload, 2500);
 		});
 
 	};
