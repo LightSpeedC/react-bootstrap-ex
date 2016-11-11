@@ -10,7 +10,7 @@ module.exports = function (dir, context) {
 	/*
 	const aa = gen => function cb(err, val) {
 		const obj = err ? gen.throw(err) : gen.next(val);
-		obj.done || obj.value(cb); } ();
+		obj.done || (obj.value)(cb); } ();
 	aa.callback = gfn => (req, res, next) => aa(gfn(req, res, next));
 	*/
 	const array2thunk = arr => cb => {
