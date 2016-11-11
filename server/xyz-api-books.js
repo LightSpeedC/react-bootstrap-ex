@@ -1,11 +1,12 @@
 module.exports = function (context) {
 	const books = {list: [{id:0,name:'book0'}, {id:1,name:'book1'}]};
-	books.id = books.list.reduce((a, b) => Math.max(a, b.id + 1), 0);
+	const maxId = (a, b) => Math.max(a, b.id);
+	books.id = books.list.reduce(maxId, 0) + 1;
 	context.books = books;
 
 	for (let id = books.id; id < 1e3; ++id)
 		books.list.push({id, name: 'book'+id});
-	books.id = books.list.reduce((a, b) => Math.max(a, b.id + 1), 0);
+	books.id = books.list.reduce(maxId, 0) + 1;
 	const SIZE = 10;
 
 	const router = require('express').Router();
