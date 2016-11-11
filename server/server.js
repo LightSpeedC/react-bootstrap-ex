@@ -9,6 +9,8 @@ void function () {
 		hot_reload_port: process.env.HOT_RELOAD_PORT || 3080};
 	console.log(context);
 
+	process.title = 'server on port: ' + context.port + ', hot reload port: ' + context.hot_reload_port;
+
 	// ボディーパーサー
 	app.set('json spaces', '  ');
 	app.use(bodyParser.json());
