@@ -99,12 +99,13 @@ module.exports = function (dir, context) {
 
 		function resFile(file) { // ファイルを応答
 			const ext = path.extname(file);
-			let maxAge = 0; // 0秒
+			const headers = {'content-type': TYPES[ext] || 'text/plain'};
+			let maxAge = 0;
 			if (req.url.startsWith('/js/') ||
 				req.url.startsWith('/css/') ||
 				req.url.startsWith('/favicon')) maxAge = 600; // 10分
-			res.writeHead(200, {'content-type': TYPES[ext] || 'text/plain',
-				'cache-control': 'max-age=' + maxAge});
+			if (maxAge) headers['cache-control'] = 'max-age=' + maxAge;
+			res.writeHead(200, headers);
 			fs.createReadStream(file).on('error', resError)
 				.on('end', () => res.end(ext !== '.html' ? undefined: HOT_RELOAD_SCRIPT))
 				.pipe(res, {end:false});

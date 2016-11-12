@@ -31,9 +31,10 @@ void function () {
 			else if (t < 100) time = ' ' + time.yellow;
 			else time = time.red;
 
-			msg = msg + time + (' - ' + res.statusCode + ' ' +
-				http.STATUS_CODES[res.statusCode] + ' -' +
-				('     ' + (len / 1e3).toFixed(3)).substr(-9) + ' KB ').gray +
+			msg = msg + time + (' -' +
+				('     ' + (len / 1e3).toFixed(3)).substr(-9) + ' KB ' +
+				res.statusCode + ' ' +
+				http.STATUS_CODES[res.statusCode] + ' - ').gray +
 				req.method + ' ' + url;
 
 			console.log(msg);
