@@ -1,10 +1,11 @@
 {
   "name": "react-bootstrap-ex",
   "version": "0.0.0",
-  "description": "",
+  "description": "react-bootstrap-ex\r ====",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "@types/node": "^6.0.47",
     "aa": "^0.1.40",
     "babel-core": "^6.18.0",
     "babel-preset-es2015": "^6.18.0",
@@ -13,6 +14,8 @@
     "bootstrap": "3",
     "browserify": "^13.1.1",
     "del": "^2.2.2",
+    "eslint": "^3.10.1",
+    "eslint-plugin-react": "^6.7.1",
     "graceful-fs": "4",
     "gulp": "^3.9.1",
     "gulp-notify": "^2.2.0",
@@ -31,8 +34,17 @@
     "react-tap-event-plugin": "^1.0.0",
     "regenerator-runtime": "^0.9.5",
     "run-sequence": "^1.2.2",
+    "typescript": "^2.0.6",
     "vinyl-source-stream": "^1.1.0",
     "ws": "^1.1.1"
+  },
+  "homepage": "https://github.com/LightSpeedC/react-bootstrap-ex#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LightSpeedC/react-bootstrap-ex.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LightSpeedC/react-bootstrap-ex/issues"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,0 +1,18 @@
+{
+	// 1 つのタブに相当するスペースの数。`editor.detectIndentation` がオンの場合、この設定はファイル コンテンツに基づいて上書きされます。
+	"editor.tabSize": 4,
+
+	// Tab キーを押すとスペースが挿入されます。`editor.detectIndentation` がオンの場合、この設定はファイル コンテンツに基づいて上書きされます。
+	"editor.insertSpaces": false,
+
+	// ファイルを開くと、そのファイルの内容に基づいて `editor.tabSize` と `editor.insertSpaces` が検出されます。
+	"editor.detectIndentation": true,
+
+	// エディターで空白文字を表示する方法を制御します。'none'、'boundary' および 'all' が使用可能です。'boundary' オプションでは、単語間の単一スペースは表示されません。
+	"editor.renderWhitespace": "all",
+
+	// エディターで制御文字を表示する必要があるかどうかを制御します
+	"editor.renderControlCharacters": true,
+
+	"typescript.tsdk": "./node_modules/typescript/lib"
+}
